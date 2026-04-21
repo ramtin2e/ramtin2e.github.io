@@ -246,149 +246,33 @@ main {
 
 <main>
 
-  <p class="blog-section-label">SOC Automation</p>
+  <p class="blog-section-label">Projects</p>
 
   <a class="blog-entry" href="#">
-    <div class="entry-icon">🔗</div>
+    <div class="entry-icon">🧭</div>
     <div class="entry-body">
-      <div class="entry-title">Building an End-to-End SOC Automation Pipeline</div>
+      <div class="entry-title">Path of Exile Navigation</div>
       <div class="entry-meta">Coming soon</div>
-      <div class="entry-desc">Architecting a full SOC automation stack with Wazuh, Shuffle, and TheHive — from raw event ingestion to automated case creation and response.</div>
+      <div class="entry-desc">The navigation layer of Path of Exile Auto, focused on route planning, waypoint logic, and reliable movement across game areas.</div>
       <div class="entry-tags">
-        <span class="tag">wazuh</span>
-        <span class="tag">shuffle</span>
-        <span class="tag">thehive</span>
-        <span class="tag">soar</span>
+        <span class="tag">poe-auto</span>
+        <span class="tag">navigation</span>
+        <span class="tag">tooling</span>
       </div>
     </div>
     <div class="entry-arrow">→</div>
   </a>
 
   <a class="blog-entry" href="#">
-    <div class="entry-icon">🔍</div>
+    <div class="entry-icon">🎯</div>
     <div class="entry-body">
-      <div class="entry-title">IOC Enrichment with OSINT Integrations</div>
+      <div class="entry-title">Loot &amp; Mob Object Detection</div>
       <div class="entry-meta">Coming soon</div>
-      <div class="entry-desc">Wiring VirusTotal, AbuseIPDB, and MISP into the Shuffle workflow to automatically enrich alerts with threat intelligence before analyst review.</div>
+      <div class="entry-desc">The detection layer of Path of Exile Auto, centered on identifying loot, enemies, and interactable game objects from the live scene.</div>
       <div class="entry-tags">
-        <span class="tag">osint</span>
-        <span class="tag">virustotal</span>
-        <span class="tag">ioc</span>
-        <span class="tag">automation</span>
-      </div>
-    </div>
-    <div class="entry-arrow">→</div>
-  </a>
-
-  <a class="blog-entry" href="#">
-    <div class="entry-icon">⚡</div>
-    <div class="entry-body">
-      <div class="entry-title">Automating Responsive Actions: Isolation, Blocking & Alerting</div>
-      <div class="entry-meta">Coming soon</div>
-      <div class="entry-desc">How the pipeline closes the loop — triggering host isolation, firewall rules, and email notifications without waiting for a human in the chain.</div>
-      <div class="entry-tags">
-        <span class="tag">response</span>
-        <span class="tag">firewall</span>
-        <span class="tag">containment</span>
-      </div>
-    </div>
-    <div class="entry-arrow">→</div>
-  </a>
-
-  <p class="blog-section-label">ELK SIEM</p>
-
-  <a class="blog-entry" href="#">
-    <div class="entry-icon">📊</div>
-    <div class="entry-body">
-      <div class="entry-title">Deploying a Home Lab SIEM with the Elastic Stack</div>
-      <div class="entry-meta">Coming soon</div>
-      <div class="entry-desc">Standing up Elasticsearch, Logstash, and Kibana from scratch — ingesting Windows event logs, Sysmon, and network flows into a unified security dashboard.</div>
-      <div class="entry-tags">
-        <span class="tag">elasticsearch</span>
-        <span class="tag">kibana</span>
-        <span class="tag">siem</span>
-        <span class="tag">homelab</span>
-      </div>
-    </div>
-    <div class="entry-arrow">→</div>
-  </a>
-
-  <a class="blog-entry" href="#">
-    <div class="entry-icon">🚨</div>
-    <div class="entry-body">
-      <div class="entry-title">Writing Custom Detection Rules in Kibana</div>
-      <div class="entry-meta">Coming soon</div>
-      <div class="entry-desc">Translating MITRE ATT&CK techniques into EQL and KQL detection rules — covering lateral movement, credential access, and persistence patterns.</div>
-      <div class="entry-tags">
-        <span class="tag">eql</span>
-        <span class="tag">kql</span>
-        <span class="tag">mitre</span>
+        <span class="tag">poe-auto</span>
         <span class="tag">detection</span>
-      </div>
-    </div>
-    <div class="entry-arrow">→</div>
-  </a>
-
-  <a class="blog-entry" href="#">
-    <div class="entry-icon">🪵</div>
-    <div class="entry-body">
-      <div class="entry-title">Log Normalization and Pipeline Tuning with Logstash</div>
-      <div class="entry-meta">Coming soon</div>
-      <div class="entry-desc">Parsing and normalizing heterogeneous log sources — Sysmon XML, Windows Security events, and firewall syslogs — into a consistent ECS schema.</div>
-      <div class="entry-tags">
-        <span class="tag">logstash</span>
-        <span class="tag">ecs</span>
-        <span class="tag">parsing</span>
-        <span class="tag">sysmon</span>
-      </div>
-    </div>
-    <div class="entry-arrow">→</div>
-  </a>
-
-  <p class="blog-section-label">RADAR</p>
-
-  <a class="blog-entry" href="#">
-    <div class="entry-icon">📡</div>
-    <div class="entry-body">
-      <div class="entry-title">Building RADAR: A Local Machine Vulnerability Scanner</div>
-      <div class="entry-meta">Coming soon</div>
-      <div class="entry-desc">Design decisions behind RADAR — a CLI security scanner that audits open ports, SUID binaries, SSH hardening, kernel sockets, and sysctl parameters in one pass.</div>
-      <div class="entry-tags">
-        <span class="tag">python</span>
-        <span class="tag">cli</span>
-        <span class="tag">hardening</span>
-        <span class="tag">scanner</span>
-      </div>
-    </div>
-    <div class="entry-arrow">→</div>
-  </a>
-
-  <a class="blog-entry" href="#">
-    <div class="entry-icon">🔒</div>
-    <div class="entry-body">
-      <div class="entry-title">Port Scanning and Service Fingerprinting Under the Hood</div>
-      <div class="entry-meta">Coming soon</div>
-      <div class="entry-desc">How RADAR's port module works — checking ~55 common ports, identifying risky exposed services, and explaining what each finding actually means for your attack surface.</div>
-      <div class="entry-tags">
-        <span class="tag">ports</span>
-        <span class="tag">networking</span>
-        <span class="tag">fingerprinting</span>
-      </div>
-    </div>
-    <div class="entry-arrow">→</div>
-  </a>
-
-  <a class="blog-entry" href="#">
-    <div class="entry-icon">⚙️</div>
-    <div class="entry-body">
-      <div class="entry-title">Auditing sysctl, umask, and Kernel-Level Security Parameters</div>
-      <div class="entry-meta">Coming soon</div>
-      <div class="entry-desc">A deep dive into what RADAR checks in module 4 — kernel hardening flags, dangerous sysctl values, and why default Linux configs leave you more exposed than you think.</div>
-      <div class="entry-tags">
-        <span class="tag">sysctl</span>
-        <span class="tag">kernel</span>
-        <span class="tag">linux</span>
-        <span class="tag">hardening</span>
+        <span class="tag">computer-vision</span>
       </div>
     </div>
     <div class="entry-arrow">→</div>
