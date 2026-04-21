@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<title>Ramtin.</title>
+<title>Blog — Ramtin.</title>
 <style>
 @import "https://fonts.googleapis.com/css2?family=Sen:wght@400;600&family=Source+Code+Pro&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap";
 
@@ -46,18 +46,17 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
   .hamburger-checkbox:checked ~ .nav-links { display: flex; }
 }
 
-/* HERO SECTION */
-.pagefill {
+/* HERO BANNER */
+.hero {
   position: relative;
-  height: calc(100vh - var(--navbar-size));
+  height: 260px;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Canvas fills the entire hero */
-#myCanvas {
+#heroBanner {
   position: absolute;
   top: 0; left: 0;
   width: 100% !important;
@@ -66,158 +65,344 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
   z-index: 0;
 }
 
-/* Dim overlay */
-.shader-dim {
+.hero-dim {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0, 10, 22, 0.45);
+  background: rgba(0, 10, 22, 0.55);
   z-index: 1;
   pointer-events: none;
 }
 
-/* Bio content sits on top */
-.me {
+.hero-text {
   position: relative;
   z-index: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.bio {
-  font-size: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   text-align: center;
-}
-.bio h1 { color: var(--text-primary); }
-.bio > p { color: rgb(var(--accent-light)); font-family: Sen, Helvetica, sans-serif; }
-.links { display: flex; flex-direction: row; font-size: 1rem; gap: 0; align-items: center; }
-.links > *:not(:first-child) { margin-left: 10px; }
-.bio a { color: rgb(var(--accent-light)); font-family: 'Source Code Pro', Courier New, monospace; }
-
-.profile {
-  width: 256px; height: 256px; border-radius: 50%; overflow: hidden;
-  border: 2px solid rgba(255,255,255,0.8);
-  display: flex; justify-content: center; align-items: center;
-  background-color: rgb(var(--accent));
-  margin-bottom: 1rem;
-  box-shadow: 0 0 40px rgba(30,100,180,0.4);
-}
-.profile img { width: 100%; height: 100%; object-fit: cover; }
-
-/* PROJECT CARDS */
-main { margin: auto; padding: 1rem; max-width: 800px; color: var(--text-primary); }
-
-.projects { display: flex; flex-direction: column; margin-bottom: 1rem; gap: 1rem; }
-
-.gallery {
-  display: grid; grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto; grid-gap: 1rem; align-items: stretch;
+  color: var(--text-primary);
 }
 
-.link-card {
-  position: relative; list-style: none; display: flex; padding: 1px;
-  background-color: rgb(var(--bg-dark)); background-image: none;
-  background-size: 400%; border-radius: 8px; background-position: 100%;
-  transition: background-position .6s cubic-bezier(.22,1,.36,1);
-  box-shadow: inset 0 0 0 1px #ffffff1a; width: 100%; aspect-ratio: 16/9;
+.hero-text h1 {
+  font-size: 3rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.4rem;
 }
-.link-card > .hl {
-  position: absolute; background: rgb(var(--bg-dark));
-  border-radius: 8px; width: calc(100% - 2px); height: calc(100% - 2px);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: 0 1rem; opacity: .85; transition: opacity .25s ease;
+
+.hero-text p {
+  color: rgb(var(--accent-light));
+  font-family: 'Source Code Pro', Courier New, monospace;
+  font-size: 0.95rem;
+  opacity: 0.85;
 }
-.link-card h2 {
-  margin: 0; font-size: 1.25rem;
-  transition: color .6s cubic-bezier(.22,1,.36,1);
+
+/* BLOG CONTENT */
+main {
+  margin: auto;
+  padding: 2rem 1rem 3rem;
+  max-width: 800px;
+  color: var(--text-primary);
+}
+
+.blog-section-label {
+  font-family: 'Source Code Pro', Courier New, monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgb(var(--accent-light));
+  opacity: 0.6;
+  margin-bottom: 1.2rem;
+  margin-top: 2.5rem;
+}
+
+.blog-section-label:first-child {
+  margin-top: 0;
+}
+
+.blog-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  padding: 1.1rem 1.2rem;
+  border-radius: 8px;
+  background-color: rgb(var(--bg-dark));
+  box-shadow: inset 0 0 0 1px #ffffff1a;
+  margin-bottom: 0.75rem;
+  text-decoration: none;
+  transition: background-position 0.5s cubic-bezier(.22,1,.36,1), box-shadow 0.25s ease;
+  background-size: 400%;
+  background-position: 100%;
+  cursor: pointer;
+}
+
+.blog-entry:hover {
+  background-image: var(--accent-gradient);
+  background-position: 0;
+  box-shadow: inset 0 0 0 1px #ffffff30;
+}
+
+.blog-entry:hover .entry-title {
+  color: rgb(var(--accent-light));
+}
+
+.entry-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  background: rgba(30, 100, 180, 0.18);
+  border: 1px solid rgba(120, 180, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.entry-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.entry-title {
   font-family: Sen, Helvetica, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: color 0.4s;
+  margin-bottom: 0.25rem;
 }
-.link-card p {
-  margin-top: .5rem; margin-bottom: 0;
-  text-align: center; font-family: 'Source Code Pro', Courier New, monospace;
-}
-.link-card:is(:hover,:focus-within) { background-position: 0; background-image: var(--accent-gradient); }
-.link-card:is(:hover,:focus-within) h2 { color: rgb(var(--accent-light)); }
-.link-card:is(:hover,:focus-within) .hl { opacity: .75; }
-.spangrid { grid-column: 1 / span 2; }
-.card-img { border-radius: 8px; object-fit: cover; width: 100%; height: 100%; }.soc-img { object-fit: cover; object-position: center 15%; }
 
-@media screen and (max-width: 600px) {
-  .link-card { grid-column: 1 / span 2; }
-  .profile { width: 180px; height: 180px; }
+.entry-meta {
+  font-family: 'Source Code Pro', Courier New, monospace;
+  font-size: 0.72rem;
+  color: rgb(var(--accent-light));
+  opacity: 0.55;
+  margin-bottom: 0.4rem;
+}
+
+.entry-desc {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.6);
+  font-family: 'Source Code Pro', Courier New, monospace;
+  line-height: 1.5;
+}
+
+.entry-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.tag {
+  font-family: 'Source Code Pro', Courier New, monospace;
+  font-size: 0.65rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(30, 100, 180, 0.2);
+  border: 1px solid rgba(120, 180, 255, 0.2);
+  color: rgb(var(--accent-light));
+  opacity: 0.8;
+  text-transform: lowercase;
+}
+
+.entry-arrow {
+  flex-shrink: 0;
+  color: rgba(120, 180, 255, 0.3);
+  font-size: 1.1rem;
+  align-self: center;
+  transition: color 0.25s, transform 0.25s;
+}
+
+.blog-entry:hover .entry-arrow {
+  color: rgb(var(--accent-light));
+  transform: translateX(3px);
+}
+
+@media (max-width: 600px) {
+  .hero-text h1 { font-size: 2rem; }
+  .entry-icon { display: none; }
 }
 </style>
 </head>
 <body>
 
 <nav class="navbar">
-  <a href="./index.html" class="logo">ramtin.rs</a>
+  <a href="index.html" class="logo">ramtin.rs</a>
   <input id="navbar-toggle" type="checkbox" class="hamburger-checkbox">
   <label for="navbar-toggle" class="hamburger">&#9776;</label>
   <ul class="nav-links">
-    <li><a href="./index.html">Home</a></li>
-    <li><a href="./blog/blog.html">Blog</a></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="blog.html">Blog</a></li>
   </ul>
 </nav>
 
-<section class="pagefill">
-  <canvas id="myCanvas"></canvas>
-  <div class="shader-dim"></div>
-  <div class="me">
-    <div class="bio">
-      <div class="profile">
-        <img src="imgs/profile.png" alt="me">
-      </div>
-      <h1>Ramtin Karimi</h1>
-      <p>Cybersecurity / Automation</p>
-      <div class="links">
-        <a href="https://github.com/ramtin2e">github</a>
-        <p>.</p>
-        <a href="https://www.linkedin.com/in/ramtin-karimi-8a480924a/">linkedin</a>
-      </div>
-    </div>
+<!-- Shader hero banner -->
+<div class="hero">
+  <canvas id="heroBanner"></canvas>
+  <div class="hero-dim"></div>
+  <div class="hero-text">
+    <h1>Blog</h1>
+    <p>writeups &middot; breakdowns &middot; technical notes</p>
   </div>
-</section>
+</div>
 
 <main>
-  <section class="projects">
-    <h1>Security</h1>
-    <div class="gallery">
-      <div class="link-card spangrid">
-        <img alt="SOC Automation diagram" class="card-img soc-img" src="imgs/SOC.png">
-        <a class="hl" href="https://github.com/ramtin2e/SOC-Automation">
-          <h2>SOC Automation</h2>
-          <p>End-to-end SOC automation pipeline using Wazuh, Shuffle, and TheHive for alert triage, IOC enrichment, and responsive actions</p>
-        </a>
-      </div>
-      <div class="link-card spangrid">
-        <img alt="ELK SIEM dashboard" class="card-img" src="imgs/ELK.png">
-        <a class="hl" href="https://github.com/ramtin2e/ELK-SIEM">
-          <h2>ELK SIEM</h2>
-          <p>Security Information and Event Management system built on the Elastic Stack — ingest, detect, and visualize threats at scale</p>
-        </a>
-      </div>
-      <div class="link-card spangrid">
-        <img alt="RADAR vulnerability scanner" class="card-img" src="imgs/radar.png">
-        <a class="hl" href="https://github.com/ramtin2e/radar-vulnscanner">
-          <h2>RADAR</h2>
-          <p>Local machine security scanner — port scanning, file permission audits, kernel-level socket inspection, and sysctl hardening checks</p>
-        </a>
+
+  <p class="blog-section-label">SOC Automation</p>
+
+  <a class="blog-entry" href="#">
+    <div class="entry-icon">🔗</div>
+    <div class="entry-body">
+      <div class="entry-title">Building an End-to-End SOC Automation Pipeline</div>
+      <div class="entry-meta">Coming soon</div>
+      <div class="entry-desc">Architecting a full SOC automation stack with Wazuh, Shuffle, and TheHive — from raw event ingestion to automated case creation and response.</div>
+      <div class="entry-tags">
+        <span class="tag">wazuh</span>
+        <span class="tag">shuffle</span>
+        <span class="tag">thehive</span>
+        <span class="tag">soar</span>
       </div>
     </div>
-  </section>
+    <div class="entry-arrow">→</div>
+  </a>
+
+  <a class="blog-entry" href="#">
+    <div class="entry-icon">🔍</div>
+    <div class="entry-body">
+      <div class="entry-title">IOC Enrichment with OSINT Integrations</div>
+      <div class="entry-meta">Coming soon</div>
+      <div class="entry-desc">Wiring VirusTotal, AbuseIPDB, and MISP into the Shuffle workflow to automatically enrich alerts with threat intelligence before analyst review.</div>
+      <div class="entry-tags">
+        <span class="tag">osint</span>
+        <span class="tag">virustotal</span>
+        <span class="tag">ioc</span>
+        <span class="tag">automation</span>
+      </div>
+    </div>
+    <div class="entry-arrow">→</div>
+  </a>
+
+  <a class="blog-entry" href="#">
+    <div class="entry-icon">⚡</div>
+    <div class="entry-body">
+      <div class="entry-title">Automating Responsive Actions: Isolation, Blocking & Alerting</div>
+      <div class="entry-meta">Coming soon</div>
+      <div class="entry-desc">How the pipeline closes the loop — triggering host isolation, firewall rules, and email notifications without waiting for a human in the chain.</div>
+      <div class="entry-tags">
+        <span class="tag">response</span>
+        <span class="tag">firewall</span>
+        <span class="tag">containment</span>
+      </div>
+    </div>
+    <div class="entry-arrow">→</div>
+  </a>
+
+  <p class="blog-section-label">ELK SIEM</p>
+
+  <a class="blog-entry" href="#">
+    <div class="entry-icon">📊</div>
+    <div class="entry-body">
+      <div class="entry-title">Deploying a Home Lab SIEM with the Elastic Stack</div>
+      <div class="entry-meta">Coming soon</div>
+      <div class="entry-desc">Standing up Elasticsearch, Logstash, and Kibana from scratch — ingesting Windows event logs, Sysmon, and network flows into a unified security dashboard.</div>
+      <div class="entry-tags">
+        <span class="tag">elasticsearch</span>
+        <span class="tag">kibana</span>
+        <span class="tag">siem</span>
+        <span class="tag">homelab</span>
+      </div>
+    </div>
+    <div class="entry-arrow">→</div>
+  </a>
+
+  <a class="blog-entry" href="#">
+    <div class="entry-icon">🚨</div>
+    <div class="entry-body">
+      <div class="entry-title">Writing Custom Detection Rules in Kibana</div>
+      <div class="entry-meta">Coming soon</div>
+      <div class="entry-desc">Translating MITRE ATT&CK techniques into EQL and KQL detection rules — covering lateral movement, credential access, and persistence patterns.</div>
+      <div class="entry-tags">
+        <span class="tag">eql</span>
+        <span class="tag">kql</span>
+        <span class="tag">mitre</span>
+        <span class="tag">detection</span>
+      </div>
+    </div>
+    <div class="entry-arrow">→</div>
+  </a>
+
+  <a class="blog-entry" href="#">
+    <div class="entry-icon">🪵</div>
+    <div class="entry-body">
+      <div class="entry-title">Log Normalization and Pipeline Tuning with Logstash</div>
+      <div class="entry-meta">Coming soon</div>
+      <div class="entry-desc">Parsing and normalizing heterogeneous log sources — Sysmon XML, Windows Security events, and firewall syslogs — into a consistent ECS schema.</div>
+      <div class="entry-tags">
+        <span class="tag">logstash</span>
+        <span class="tag">ecs</span>
+        <span class="tag">parsing</span>
+        <span class="tag">sysmon</span>
+      </div>
+    </div>
+    <div class="entry-arrow">→</div>
+  </a>
+
+  <p class="blog-section-label">RADAR</p>
+
+  <a class="blog-entry" href="#">
+    <div class="entry-icon">📡</div>
+    <div class="entry-body">
+      <div class="entry-title">Building RADAR: A Local Machine Vulnerability Scanner</div>
+      <div class="entry-meta">Coming soon</div>
+      <div class="entry-desc">Design decisions behind RADAR — a CLI security scanner that audits open ports, SUID binaries, SSH hardening, kernel sockets, and sysctl parameters in one pass.</div>
+      <div class="entry-tags">
+        <span class="tag">python</span>
+        <span class="tag">cli</span>
+        <span class="tag">hardening</span>
+        <span class="tag">scanner</span>
+      </div>
+    </div>
+    <div class="entry-arrow">→</div>
+  </a>
+
+  <a class="blog-entry" href="#">
+    <div class="entry-icon">🔒</div>
+    <div class="entry-body">
+      <div class="entry-title">Port Scanning and Service Fingerprinting Under the Hood</div>
+      <div class="entry-meta">Coming soon</div>
+      <div class="entry-desc">How RADAR's port module works — checking ~55 common ports, identifying risky exposed services, and explaining what each finding actually means for your attack surface.</div>
+      <div class="entry-tags">
+        <span class="tag">ports</span>
+        <span class="tag">networking</span>
+        <span class="tag">fingerprinting</span>
+      </div>
+    </div>
+    <div class="entry-arrow">→</div>
+  </a>
+
+  <a class="blog-entry" href="#">
+    <div class="entry-icon">⚙️</div>
+    <div class="entry-body">
+      <div class="entry-title">Auditing sysctl, umask, and Kernel-Level Security Parameters</div>
+      <div class="entry-meta">Coming soon</div>
+      <div class="entry-desc">A deep dive into what RADAR checks in module 4 — kernel hardening flags, dangerous sysctl values, and why default Linux configs leave you more exposed than you think.</div>
+      <div class="entry-tags">
+        <span class="tag">sysctl</span>
+        <span class="tag">kernel</span>
+        <span class="tag">linux</span>
+        <span class="tag">hardening</span>
+      </div>
+    </div>
+    <div class="entry-arrow">→</div>
+  </a>
+
 </main>
 
+<!-- Shader scripts (same as main site) -->
 <script id="Common" type="x-shader/x-fragment">
     #define FNLfloat float
     int _fnlFastFloor(FNLfloat f){return int(floor(f));}
     float _fnlInterpQuintic(float t){return t*t*t*(t*(t*6.f-15.f)+10.f);}
     float _fnlLerp(float a,float b,float t){return mix(a,b,t);}
-    const float GRADIENTS_3D[]=float[](0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,-1.f,0.f,-1.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,0.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,-1.f,0.f,-1.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,0.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,-1.f,0.f,-1.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,0.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,-1.f,0.f,-1.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,0.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,-1.f,0.f,-1.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,0.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,-1.f,0.f,-1.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,-1.f,1.f,0.f,0.f,0.f,-1.f,-1.f,0.f);
+    const float GRADIENTS_3D[]=float[](0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,-1.f,0.f,-1.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,0.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,-1.f,0.f,-1.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,0.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,-1.f,0.f,-1.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,0.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,-1.f,0.f,-1.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,0.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,-1.f,0.f,-1.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,-1.f,1.f,0.f,0.f,0.f,-1.f,-1.f,0.f);
     const int PRIME_X=501125321;const int PRIME_Y=1136930381;const int PRIME_Z=1720413743;
     int _fnlHash3D(int seed,int xPrimed,int yPrimed,int zPrimed){int hash=seed^xPrimed^yPrimed^zPrimed;hash*=0x27d4eb2d;return hash;}
     struct fnl_state{int seed;float frequency;float domain_warp_amp;};
@@ -227,16 +412,13 @@ main { margin: auto; padding: 1rem; max-width: 800px; color: var(--text-primary)
     float fnlGetNoise3D(fnl_state state,FNLfloat x,FNLfloat y,FNLfloat z){x*=state.frequency;y*=state.frequency;z*=state.frequency;return _fnlSinglePerlin3D(state.seed,x,y,z);}
 </script>
 <script id="Image" type="x-shader/x-fragment">
-    void mainImage( out vec4 U, in vec2 pos )
-    {
+    void mainImage( out vec4 U, in vec2 pos ) {
         fnl_state state = fnlCreateState(1337);
         state.frequency = .005f;
         state.domain_warp_amp = 119.0;
-        // Use normalized coords scaled to a fixed reference res to prevent tearing on resize
-        vec2 uv = gl_FragCoord.xy / iResolution.xy;
-        float x = uv.x * 800.0 + iTime * 30.0;
+        float x = gl_FragCoord.x + iTime * 30.0;
         float y = 50.f + iTime * 5.0;
-        float z = uv.y * 512.0 + iTime * 10.0;
+        float z = gl_FragCoord.y + iTime * 10.0;
         float noise = fnlGetNoise3D(state, x, y, z) / 2.f + 0.5f;
         float levels = 10.0;
         float rounding_threshold = 0.0015;
@@ -251,7 +433,6 @@ main { margin: auto; padding: 1rem; max-width: 800px; color: var(--text-primary)
         }
     }
 </script>
-
 <script>
 function ShaderToyLite(canvasId) {
     var hdr = `#version 300 es
@@ -282,19 +463,16 @@ function ShaderToyLite(canvasId) {
         mainImage( color, gl_FragCoord.xy );
         frag_out_color = vec4(color);
     }`;
-
     const basicVertexShader = `#version 300 es
     #ifdef GL_ES
     precision highp float;
     #endif
     in vec2 vertexInPosition;
     void main() { gl_Position = vec4(vertexInPosition, 0.0, 1.0); }`;
-
     const quadVertices = new Float32Array([-1,-1,1,-1,-1,1,1,1,-1,1,1,-1]);
     const canvas = document.getElementById(canvasId);
     const opts = {alpha:false,depth:false,stencil:false,antialias:true,powerPreference:"high-performance"};
     var gl = canvas.getContext('webgl2', opts);
-
     var isPlaying=false, firstDrawTime=0, prevDrawTime=0, iFrame=0;
     var iMouse={x:0,y:0,clickX:0,clickY:0};
     var common="", sourcecode={}, ichannels={}, atexture={}, btexture={};
@@ -305,25 +483,8 @@ function ShaderToyLite(canvasId) {
         var w = canvas.parentElement.offsetWidth || window.innerWidth;
         var h = canvas.parentElement.offsetHeight || window.innerHeight;
         if (canvas.width !== w || canvas.height !== h) {
-            canvas.width = w;
-            canvas.height = h;
-            if (gl) {
-                gl.viewport(0, 0, w, h);
-                // Recreate framebuffer textures at new size
-                ['A','B','C','D'].forEach(key => {
-                    if (atexture[key]) {
-                        gl.deleteTexture(atexture[key]);
-                        gl.deleteTexture(btexture[key]);
-                        atexture[key] = createTexture();
-                        btexture[key] = createTexture();
-                        gl.deleteFramebuffer(aframebuf[key]);
-                        gl.deleteFramebuffer(bframebuf[key]);
-                        aframebuf[key] = createFrameBuffer(atexture[key]);
-                        bframebuf[key] = createFrameBuffer(btexture[key]);
-                        flip[key] = false;
-                    }
-                });
-            }
+            canvas.width = w; canvas.height = h;
+            if (gl) gl.viewport(0, 0, w, h);
         }
     }
 
@@ -343,12 +504,7 @@ function ShaderToyLite(canvasId) {
         quadBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, quadVertices, gl.STATIC_DRAW);
-
         window.addEventListener('resize', resizeCanvas);
-        canvas.addEventListener("mousemove", e => { iMouse.x=e.offsetX; iMouse.y=canvas.height-e.offsetY; });
-        canvas.addEventListener("mousedown", e => { iMouse.clickX=e.offsetX; iMouse.clickY=canvas.height-e.offsetY; });
-        canvas.addEventListener("mouseup", () => { iMouse.clickX=0; iMouse.clickY=0; });
-        // Re-resize after fonts/layout settle
         setTimeout(resizeCanvas, 100);
     };
 
@@ -374,12 +530,10 @@ function ShaderToyLite(canvasId) {
 
     var compileProgram = (key) => {
         var vert = gl.createShader(gl.VERTEX_SHADER);
-        gl.shaderSource(vert, basicVertexShader);
-        gl.compileShader(vert);
+        gl.shaderSource(vert, basicVertexShader); gl.compileShader(vert);
         if(!gl.getShaderParameter(vert,gl.COMPILE_STATUS)){console.error('Vert:',gl.getShaderInfoLog(vert));return null;}
         var frag = gl.createShader(gl.FRAGMENT_SHADER);
-        gl.shaderSource(frag, hdr + common + sourcecode[key]);
-        gl.compileShader(frag);
+        gl.shaderSource(frag, hdr + common + sourcecode[key]); gl.compileShader(frag);
         if(!gl.getShaderParameter(frag,gl.COMPILE_STATUS)){console.error('Frag:',gl.getShaderInfoLog(frag));return null;}
         var prog = gl.createProgram();
         gl.attachShader(prog,vert); gl.attachShader(prog,frag); gl.linkProgram(prog);
@@ -419,7 +573,6 @@ function ShaderToyLite(canvasId) {
         var iDate=[date.getFullYear(),date.getMonth(),date.getDate(),date.getTime()*0.001];
         var iCT=new Float32Array(repeat(4,[iTime]));
         var iCR=new Float32Array(repeat(4,[canvas.width,canvas.height,0]));
-
         ['A','B','C','D','Image'].forEach(key => {
             if(!program[key]) return;
             if(key==="Image") gl.bindFramebuffer(gl.FRAMEBUFFER,null);
@@ -469,15 +622,11 @@ function ShaderToyLite(canvasId) {
     setup();
 }
 
-var toy = new ShaderToyLite("myCanvas");
+var toy = new ShaderToyLite("heroBanner");
 toy.setCommon(document.getElementById("Common").innerText);
 toy.setImage({source: document.getElementById("Image").innerText});
 toy.play();
 </script>
 
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> origin/main
