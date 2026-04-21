@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>Path of Exile Navigation - Ramtin.</title>
+<style>
+@import "https://fonts.googleapis.com/css2?family=Sen:wght@400;600&family=Source+Code+Pro&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap";
+
+* { min-width: 0; margin: 0; padding: 0; box-sizing: border-box; color: inherit; text-decoration: inherit; }
+
+:root {
+  --bg: 0, 18, 40;
+  --bg-dark: 0, 12, 28;
+  --panel: 6, 20, 42;
+  --text-primary: white;
+  --text-muted: rgba(255,255,255,0.68);
+  --accent: 30, 100, 180;
+  --accent-light: 120, 180, 255;
+  --accent-dark: 10, 60, 120;
+  --accent-gradient: linear-gradient(45deg, rgb(var(--accent-dark)), rgb(var(--accent)) 30%, rgb(var(--accent-light)) 60%);
+  --navbar-size: 60px;
+}
+
+html { font-family: Tinos, Georgia, Times, serif; background: radial-gradient(circle at top, rgba(20, 60, 110, 0.22), transparent 35%), rgb(var(--bg)); }
+body { color: var(--text-primary); }
+code { font-family: 'Source Code Pro', Courier New, monospace; }
+
+.navbar {
+  display: flex; justify-content: space-between; align-items: center;
+  background-color: rgb(var(--bg-dark)); color: var(--text-primary);
+  height: var(--navbar-size); padding: 0 1rem;
+  font-family: 'Source Code Pro', Courier New, monospace;
+  position: relative; z-index: 10;
+}
+.hamburger-checkbox { z-index: -1; display: none; }
+.hamburger { display: none; cursor: pointer; }
+.nav-links { list-style: none; display: flex; gap: 1rem; }
+
+@media (max-width: 600px) {
+  .hamburger { display: block; font-size: 1.25rem; line-height: 32px; }
+  .nav-links {
+    position: absolute; top: var(--navbar-size); left: 0; right: 0;
+    display: none; flex-direction: column; gap: .5rem; width: 100%;
+    background-color: rgb(var(--bg-dark)); padding: 1rem;
+  }
+  .hamburger-checkbox:checked ~ .nav-links { display: flex; }
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 5rem 1rem 3rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(120, 180, 255, 0.20), transparent 28%),
+    radial-gradient(circle at 80% 0%, rgba(30, 100, 180, 0.28), transparent 32%),
+    linear-gradient(180deg, rgba(5, 18, 38, 0.88), rgba(0, 12, 28, 0.95));
+}
+
+.hero-inner,
+.content {
+  width: min(920px, calc(100vw - 2rem));
+  margin: 0 auto;
+}
+
+.eyebrow,
+.section-label,
+.caption {
+  font-family: 'Source Code Pro', Courier New, monospace;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: rgb(var(--accent-light));
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  opacity: 0.72;
+}
+
+.hero h1 {
+  font-family: Sen, Helvetica, sans-serif;
+  font-size: clamp(2.4rem, 4vw, 4rem);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.hero p {
+  max-width: 760px;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.content {
+  padding: 2.2rem 0 4rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  color: rgb(var(--accent-light));
+  font-family: 'Source Code Pro', Courier New, monospace;
+  font-size: 0.9rem;
+  opacity: 0.88;
+}
+
+.article {
+  display: grid;
+  gap: 2.4rem;
+}
+
+.article-section {
+  padding: 1.5rem;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(8, 24, 46, 0.92), rgba(4, 16, 32, 0.92));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+}
+
+.section-label {
+  color: rgb(var(--accent-light));
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  opacity: 0.7;
+  margin-bottom: 1rem;
+}
+
+.article-section h2 {
+  font-family: Sen, Helvetica, sans-serif;
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  margin-bottom: 1rem;
+}
+
+.article-section p {
+  color: var(--text-muted);
+  font-size: 1.02rem;
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.article-section p:last-of-type {
+  margin-bottom: 0;
+}
+
+.image-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.35rem;
+}
+
+.image-grid.dual {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.figure {
+  background: rgba(255,255,255,0.02);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.07);
+}
+
+.figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: rgb(var(--bg-dark));
+}
+
+.caption {
+  padding: 0.9rem 1rem 1rem;
+  color: rgba(255,255,255,0.62);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 800px) {
+  .image-grid.dual { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .hero { padding-top: 3.8rem; }
+  .article-section { padding: 1.1rem; }
+  .article-section p { font-size: 0.96rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="/" class="logo">ramtin.rs</a>
+  <input id="navbar-toggle" type="checkbox" class="hamburger-checkbox">
+  <label for="navbar-toggle" class="hamburger">&#9776;</label>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Path of Exile Auto</p>
+    <h1>Path of Exile Navigation</h1>
+    <p>A tighter look at how the navigation system moved from fragile flood-fill experiments to a more stable pipeline built on luminosity correction, tuned HSV extraction, and stitched global map memory.</p>
+  </div>
+</header>
+
+<main class="content">
+  <a class="back-link" href="/blog/">&larr; Back to blog</a>
+
+  <article class="article">
+    <section class="article-section">
+      <p class="section-label">Where We Started</p>
+      <h2>Flood fill was the first workable map reader</h2>
+      <p>Navigation was the first real problem <code>poeauto</code> tried to solve. Before combat, loot, or detection, the challenge was movement: how do you move through a Path of Exile map intelligently without hardcoded routes?</p>
+      <p>The earliest system used HSV filtering and flood fill on the minimap to separate walls from playable space. When it worked, it gave us a clean local read of the map and a usable foundation for pathing. The idea was simple: isolate the wall structure, flood the interior, and treat the remaining space as navigable terrain.</p>
+      <div class="image-grid">
+        <figure class="figure">
+          <img src="./old-floodfill-good.png" alt="Old flood fill debug view showing a successful playable-space extraction.">
+          <figcaption class="caption">Early HSV + flood fill output. This is what the old method looked like when it behaved correctly, which was only around 30% of the time.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="article-section">
+      <p class="section-label">Why We Changed</p>
+      <h2>The idea worked, but the consistency did not</h2>
+      <p>The issue was consistency. Most of the time, the flood fill approach broke down under real map conditions. Brightness shifts, icons, overlapping effects, and noisy wall boundaries caused the fill to leak, overfill, or misread large sections of the map. Even small vision errors could turn into bad paths or completely invalid movement decisions.</p>
+      <p>The method was not conceptually wrong, but it was too fragile for reliable navigation. A movement system cannot depend on a pipeline that only works when the visual conditions are perfect.</p>
+      <div class="image-grid">
+        <figure class="figure">
+          <img src="./old-floodfill-bad.png" alt="Old flood fill failure case showing noisy overfilled minimap extraction.">
+          <figcaption class="caption">Typical failure case from the old flood fill pipeline. This was much closer to the normal result - inconsistent fills, noisy boundaries, and map reads that were too unstable for dependable navigation.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="article-section">
+      <p class="section-label">Where We Are Now</p>
+      <h2>Navigation now uses a cleaner read and longer memory</h2>
+      <p>The current navigation system is built around a much more stable pipeline. Instead of relying on raw flood fill behavior alone, it combines a luminosity curve, tighter HSV extraction, icon rejection, and global map stitching. That gives the bot a cleaner wall read, more continuity across frames, and a persistent representation of the map over time.</p>
+      <p>This changed navigation from a fragile local read into a more reliable world-modeling system. Instead of asking only what the current minimap frame looks like, the bot can now track where it has already been, what remains unexplored, and which routes are safest based on accumulated map state.</p>
+      <div class="image-grid dual">
+        <figure class="figure">
+          <img src="./new-system-1.png" alt="New navigation system map output showing a stable stitched map.">
+          <figcaption class="caption">New navigation output using luminosity correction, optimized HSV filtering, and stitched map state for a cleaner and more stable read.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="./new-system-2.png" alt="Second example of the new navigation system maintaining coherent map structure.">
+          <figcaption class="caption">Another example of the newer system. The map structure stays coherent across frames, giving frontier selection and pathfinding a much stronger foundation.</figcaption>
+        </figure>
+      </div>
+    </section>
+  </article>
+</main>
+
+</body>
+</html>
