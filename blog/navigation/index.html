@@ -109,6 +109,29 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
   opacity: 0.88;
 }
 
+.notice {
+  margin-bottom: 2rem;
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(12, 30, 56, 0.95), rgba(6, 18, 36, 0.95));
+  box-shadow: inset 0 0 0 1px rgba(120, 180, 255, 0.18);
+}
+
+.notice-title {
+  margin-bottom: 0.45rem;
+  color: rgb(var(--accent-light));
+  font-family: 'Source Code Pro', Courier New, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.notice p {
+  color: rgba(255,255,255,0.72);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
 .article {
   display: grid;
   gap: 2.4rem;
@@ -164,11 +187,65 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.07);
 }
 
+.figure.narrow {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
 .figure img {
   display: block;
   width: 100%;
   height: auto;
   background: rgb(var(--bg-dark));
+}
+
+.code-compare {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.35rem;
+}
+
+.code-intro {
+  margin-top: 1.3rem;
+}
+
+.code-intro p {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.96rem;
+  line-height: 1.72;
+}
+
+.code-card {
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.22);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.07);
+}
+
+.code-label {
+  padding: 0.8rem 1rem;
+  color: rgb(var(--accent-light));
+  font-family: 'Source Code Pro', Courier New, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(120, 180, 255, 0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+pre {
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  color: rgba(255,255,255,0.88);
+  font-family: 'Source Code Pro', Courier New, monospace;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  background: rgba(0, 0, 0, 0.24);
+}
+
+pre code {
+  white-space: pre;
 }
 
 .caption {
@@ -212,6 +289,11 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
 <main class="content">
   <a class="back-link" href="/blog/">&larr; Back to blog</a>
 
+  <section class="notice">
+    <p class="notice-title">Disclaimer</p>
+    <p>This project was built for educational, self-teaching purposes around computer vision, mapping, and automation architecture. It was not used on live Path of Exile servers and was not used to violate the game's Terms of Service. The code is intentionally not published on GitHub because I do not want it repurposed into a cheat by other people.</p>
+  </section>
+
   <article class="article">
     <section class="article-section">
       <p class="section-label">Where We Started</p>
@@ -219,7 +301,7 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
       <p>Navigation was the first real problem <code>poeauto</code> tried to solve. Before combat, loot, or detection, the challenge was movement: how do you move through a Path of Exile map intelligently without hardcoded routes?</p>
       <p>The earliest system used HSV filtering and flood fill on the minimap to separate walls from playable space. When it worked, it gave us a clean local read of the map and a usable foundation for pathing. The idea was simple: isolate the wall structure, flood the interior, and treat the remaining space as navigable terrain.</p>
       <div class="image-grid">
-        <figure class="figure">
+        <figure class="figure narrow">
           <img src="./old-floodfill-good.png" alt="Old flood fill debug view showing a successful playable-space extraction.">
           <figcaption class="caption">Early HSV + flood fill output. This is what the old method looked like when it behaved correctly, which was only around 30% of the time.</figcaption>
         </figure>
@@ -232,7 +314,7 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
       <p>The issue was consistency. Most of the time, the flood fill approach broke down under real map conditions. Brightness shifts, icons, overlapping effects, and noisy wall boundaries caused the fill to leak, overfill, or misread large sections of the map. Even small vision errors could turn into bad paths or completely invalid movement decisions.</p>
       <p>The method was not conceptually wrong, but it was too fragile for reliable navigation. A movement system cannot depend on a pipeline that only works when the visual conditions are perfect.</p>
       <div class="image-grid">
-        <figure class="figure">
+        <figure class="figure narrow">
           <img src="./old-floodfill-bad.png" alt="Old flood fill failure case showing noisy overfilled minimap extraction.">
           <figcaption class="caption">Typical failure case from the old flood fill pipeline. This was much closer to the normal result - inconsistent fills, noisy boundaries, and map reads that were too unstable for dependable navigation.</figcaption>
         </figure>
@@ -253,6 +335,68 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
           <img src="./new-system-2.png" alt="Second example of the new navigation system maintaining coherent map structure.">
           <figcaption class="caption">Another example of the newer system. The map structure stays coherent across frames, giving frontier selection and pathfinding a much stronger foundation.</figcaption>
         </figure>
+      </div>
+
+      <div class="code-intro">
+        <p>The code changes below show the difference in philosophy between the two systems. The older approach mostly stopped after extracting a raw wall mask, which meant navigation quality rose and fell with that one local read. The newer approach spends more work up front cleaning the image, subtracting false positives, and then merging each frame into a persistent global map instead of trusting a single snapshot.</p>
+      </div>
+
+      <div class="code-compare">
+        <div class="code-card">
+          <div class="code-label">Old poeauto: raw HSV + flood-fill-era extraction</div>
+          <pre><code>hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+lower_wall = np.array([115, 60, 60])
+upper_wall = np.array([125, 255, 255])
+
+mask_raw = cv2.inRange(hsv, lower_wall, upper_wall)
+kernel_close = np.ones((5, 5), np.uint8)
+mask_filled = cv2.morphologyEx(mask_raw, cv2.MORPH_CLOSE, kernel_close)
+
+final_mask = mask_filled</code></pre>
+        </div>
+
+        <p>The old snippet is intentionally simple: convert to HSV, threshold a narrow wall color range, close small gaps, and use that mask as the basis for navigation. That made it easy to prototype, but also meant every downstream decision depended on a mask that could drift badly as soon as the minimap got noisy.</p>
+
+        <div class="code-card">
+          <div class="code-label">New poe: luminosity correction + tighter HSV + icon rejection</div>
+          <pre><code>gamma = 2.5
+lookUpTable = np.empty((1, 256), np.uint8)
+for i in range(256):
+    lookUpTable[0, i] = np.clip(pow(i / 255.0, gamma) * 255.0, 0, 255)
+img_balanced = cv2.LUT(img, lookUpTable)
+
+hsv = cv2.cvtColor(img_balanced, cv2.COLOR_BGR2HSV)
+lower_wall = np.array([110, 60, 60])
+upper_wall = np.array([135, 255, 255])
+mask_raw = cv2.inRange(hsv, lower_wall, upper_wall)
+
+mask_raw = cv2.subtract(mask_raw, mask_portal)
+mask_raw = cv2.subtract(mask_raw, mask_arrow)
+mask_raw, excluded_mask, matches_found = mask_icons(img, mask_raw)</code></pre>
+        </div>
+
+        <p>The newer extraction stage does much more before navigation ever sees the map. A luminosity curve suppresses faint visual noise, the HSV range is widened and retuned for real tilesets, and icons such as portals or arrows are subtracted so they do not get mistaken for valid structure. The result is a cleaner local read before pathing begins.</p>
+
+        <div class="code-card">
+          <div class="code-label">New poe: stitched global map with confidence-based wall updates</div>
+          <pre><code>wall_mask = (mask &gt; 0)
+conf_roi[wall_mask] = np.minimum(conf_roi[wall_mask] + 1, 100)
+
+empty_mask = (mask == 0) &amp; (vision_circle &gt; 0)
+if excluded_mask is not None:
+    empty_mask &amp;= (excluded_mask == 0)
+
+conf_roi[empty_mask] = np.maximum(conf_roi[empty_mask].astype(int) - 5, 0).astype(np.uint8)
+
+new_walls = (conf_roi &gt;= self.CONF_THRESHOLD)
+target_roi[new_walls] = 255
+
+dead_walls = (conf_roi == 0) &amp; (vision_circle &gt; 0)
+target_roi[dead_walls] = 0</code></pre>
+        </div>
+
+        <p>This final piece is what really changed navigation. Instead of treating each minimap capture as truth, the system accumulates confidence in walls over time and can also erase stale walls when new evidence says they are gone. That is what turns the newer version from a one-frame detector into a stitched map system with memory.</p>
       </div>
     </section>
   </article>
