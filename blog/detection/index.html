@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>Loot &amp; Mob Object Detection - Ramtin.</title>
+<style>
+@import "https://fonts.googleapis.com/css2?family=Sen:wght@400;600&family=Source+Code+Pro&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap";
+
+* { min-width: 0; margin: 0; padding: 0; box-sizing: border-box; color: inherit; text-decoration: inherit; }
+
+:root {
+  --bg: 0, 18, 40;
+  --bg-dark: 0, 12, 28;
+  --text-primary: white;
+  --text-muted: rgba(255,255,255,0.68);
+  --accent: 30, 100, 180;
+  --accent-light: 120, 180, 255;
+  --accent-dark: 10, 60, 120;
+  --navbar-size: 60px;
+}
+
+html { font-family: Tinos, Georgia, Times, serif; background: radial-gradient(circle at top, rgba(20, 60, 110, 0.22), transparent 35%), rgb(var(--bg)); }
+body { color: var(--text-primary); }
+code { font-family: 'Source Code Pro', Courier New, monospace; }
+
+.navbar {
+  display: flex; justify-content: space-between; align-items: center;
+  background-color: rgb(var(--bg-dark)); color: var(--text-primary);
+  height: var(--navbar-size); padding: 0 1rem;
+  font-family: 'Source Code Pro', Courier New, monospace;
+  position: relative; z-index: 10;
+}
+.hamburger-checkbox { z-index: -1; display: none; }
+.hamburger { display: none; cursor: pointer; }
+.nav-links { list-style: none; display: flex; gap: 1rem; }
+
+@media (max-width: 600px) {
+  .hamburger { display: block; font-size: 1.25rem; line-height: 32px; }
+  .nav-links {
+    position: absolute; top: var(--navbar-size); left: 0; right: 0;
+    display: none; flex-direction: column; gap: .5rem; width: 100%;
+    background-color: rgb(var(--bg-dark)); padding: 1rem;
+  }
+  .hamburger-checkbox:checked ~ .nav-links { display: flex; }
+}
+
+.hero {
+  overflow: hidden;
+  padding: 5rem 1rem 3rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background:
+    radial-gradient(circle at 18% 18%, rgba(120, 180, 255, 0.18), transparent 26%),
+    radial-gradient(circle at 82% 0%, rgba(30, 100, 180, 0.26), transparent 32%),
+    linear-gradient(180deg, rgba(5, 18, 38, 0.88), rgba(0, 12, 28, 0.95));
+}
+
+.hero-inner,
+.content {
+  width: min(920px, calc(100vw - 2rem));
+  margin: 0 auto;
+}
+
+.eyebrow,
+.section-label,
+.caption,
+.notice-title,
+.code-label,
+.back-link {
+  font-family: 'Source Code Pro', Courier New, monospace;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: rgb(var(--accent-light));
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  opacity: 0.72;
+}
+
+.hero h1 {
+  font-family: Sen, Helvetica, sans-serif;
+  font-size: clamp(2.4rem, 4vw, 4rem);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.hero p {
+  max-width: 760px;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.content { padding: 2.2rem 0 4rem; }
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  color: rgb(var(--accent-light));
+  font-size: 0.9rem;
+  opacity: 0.88;
+}
+
+.notice {
+  margin-bottom: 2rem;
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(12, 30, 56, 0.95), rgba(6, 18, 36, 0.95));
+  box-shadow: inset 0 0 0 1px rgba(120, 180, 255, 0.18);
+}
+
+.notice-title {
+  margin-bottom: 0.45rem;
+  color: rgb(var(--accent-light));
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.notice p,
+.article-section p,
+.code-intro p {
+  color: rgba(255,255,255,0.72);
+  line-height: 1.72;
+}
+
+.notice p { font-size: 0.92rem; }
+
+.article {
+  display: grid;
+  gap: 2.4rem;
+}
+
+.article-section {
+  padding: 1.5rem;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(8, 24, 46, 0.92), rgba(4, 16, 32, 0.92));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+}
+
+.section-label {
+  color: rgb(var(--accent-light));
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  opacity: 0.7;
+  margin-bottom: 1rem;
+}
+
+.article-section h2 {
+  font-family: Sen, Helvetica, sans-serif;
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  margin-bottom: 1rem;
+}
+
+.article-section p {
+  font-size: 1.02rem;
+  margin-bottom: 1rem;
+}
+
+.image-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.35rem;
+}
+
+.figure {
+  background: rgba(255,255,255,0.02);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.07);
+}
+
+.figure.narrow {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: rgb(var(--bg-dark));
+}
+
+.caption {
+  padding: 0.9rem 1rem 1rem;
+  color: rgba(255,255,255,0.62);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.code-intro { margin-top: 1.3rem; }
+.code-intro p { font-size: 0.96rem; }
+
+.code-compare {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.35rem;
+}
+
+.code-card {
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.22);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.07);
+}
+
+.code-label {
+  padding: 0.8rem 1rem;
+  color: rgb(var(--accent-light));
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(120, 180, 255, 0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+pre {
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  color: rgba(255,255,255,0.88);
+  font-family: 'Source Code Pro', Courier New, monospace;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  background: rgba(0, 0, 0, 0.24);
+}
+
+pre code { white-space: pre; }
+
+@media (max-width: 600px) {
+  .hero { padding-top: 3.8rem; }
+  .article-section { padding: 1.1rem; }
+  .article-section p { font-size: 0.96rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="/" class="logo">ramtin.rs</a>
+  <input id="navbar-toggle" type="checkbox" class="hamburger-checkbox">
+  <label for="navbar-toggle" class="hamburger">&#9776;</label>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog/">Blog</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Path of Exile Auto</p>
+    <h1>Loot &amp; Mob Object Detection</h1>
+    <p>A breakdown of how the project moved from navigation-only mapping into a real-time detection stack for monsters, portals, and currency, along with the tradeoffs that still show up in live scenes.</p>
+  </div>
+</header>
+
+<main class="content">
+  <a class="back-link" href="/blog/">&larr; Back to blog</a>
+
+  <section class="notice">
+    <p class="notice-title">Disclaimer</p>
+    <p>This project was built for educational, self-teaching purposes around computer vision, mapping, and automation architecture. It was not used on live Path of Exile servers and was not used to violate the game's Terms of Service. The code is intentionally not published on GitHub because I do not want it repurposed into a cheat by other people.</p>
+  </section>
+
+  <article class="article">
+    <section class="article-section">
+      <p class="section-label">What Worked</p>
+      <h2>Detection became good enough to drive real gameplay decisions</h2>
+      <p>Once navigation was stable, the next step was teaching the project how to understand what was happening on screen. That meant moving from minimap structure into object-level detection: monsters to attack, currency to pick up, and interactables such as portals that should be recognized instead of confused for combat targets.</p>
+      <p>The current detection stack is built around YOLO11n, trained for a narrow set of Path of Exile classes and then wrapped in a lightweight inference layer. In practice, this gave the project a surprisingly usable combat and loot signal. Most of the time, enemies and currency were picked up well enough for the controller to make immediate decisions about whether to fight, loot, or keep navigating.</p>
+      <div class="image-grid">
+        <figure class="figure narrow">
+          <img src="./detection-good.png" alt="Object detection collage showing monsters and currency being detected across multiple frames.">
+          <figcaption class="caption">Strong detection case from the current pipeline. This is closer to the normal success path, where loot and mob targets are picked up clearly enough for the controller to act on them.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="article-section">
+      <p class="section-label">What Still Breaks</p>
+      <h2>False positives and edge cases still exist</h2>
+      <p>Even with a stronger detector, the system is not perfect. One of the more persistent issues is false positives around UI-adjacent elements and health-bar-like shapes. In difficult scenes, the model or fallback logic can still latch onto things that look structured enough to matter but do not actually represent a valid combat target.</p>
+      <p>That is why the final implementation does not trust raw detections alone. Detection quality is high enough to be useful, but still noisy enough that it needs filtering, thresholds, deadzones, and fallback logic to stay reliable inside the full bot loop.</p>
+      <div class="image-grid">
+        <figure class="figure narrow">
+          <img src="./detection-bad.png" alt="Detection failure example showing false positives around health bars.">
+          <figcaption class="caption">Example of the inconsistencies that still exist. YOLO11 object detection is useful, but edge cases like false positives around health bars still need to be handled carefully.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="article-section">
+      <p class="section-label">Implementation</p>
+      <h2>The detector is only one part of the system</h2>
+      <p>The implementation is split across a few layers. <code>ml/detect.py</code> wraps the trained YOLO model and converts its raw predictions into a smaller set of classes the rest of the project cares about. <code>combat_loop.py</code> then turns those detections into action: monsters become combat targets, currency becomes loot targets, and the controller decides whether navigation should pause while combat or pickup happens.</p>
+      <p>The other important tool in the stack is the health-bar detector. It acts as a stronger short-range combat signal in cases where raw object detection is less stable. That mix of learned detection plus rule-based filtering ended up being much more reliable than relying on only one source of truth.</p>
+
+      <div class="code-intro">
+        <p>The snippets below show the practical structure of the implementation: first the model wrapper that narrows the classes and filters detections, then the controller logic that decides how those detections get used in combat and loot behavior.</p>
+      </div>
+
+      <div class="code-compare">
+        <div class="code-card">
+          <div class="code-label">Model wrapper: YOLO inference narrowed to project-relevant classes</div>
+          <pre><code>results = self.model.predict(
+    frame,
+    conf=conf or self.conf,
+    device=self.device,
+    verbose=False,
+    half=(str(self.device) != 'cpu'),
+    augment=False,
+    agnostic_nms=False,
+    classes=[0, 2, 3]
+)
+
+for box in r.boxes:
+    cls_id = int(box.cls[0])
+    cls_name = self.names[cls_id]
+    x1, y1, x2, y2 = [int(v) for v in box.xyxy[0]]</code></pre>
+        </div>
+
+        <p>This first layer keeps the runtime focused on only the classes the project actually needs: monsters, portals, and currency. That sounds small, but reducing the output space matters because it lowers noise and makes every later decision simpler.</p>
+
+        <div class="code-card">
+          <div class="code-label">Post-processing: center deadzone to avoid self-targeting noise</div>
+          <pre><code>if filter_player_center and cls_name == "Monster":
+    box_cx = (x1 + x2) / 2
+    box_cy = (y1 + y2) / 2
+    if abs(box_cx - center_x) < (deadzone_x / 2) and \
+       abs(box_cy - center_y) < (deadzone_y / 2):
+        continue</code></pre>
+        </div>
+
+        <p>This is one of the simple but important protections in the pipeline. A lot of bad detections become much less harmful if the center of the screen is treated as a deadzone, because that area is dominated by the player and nearby effects.</p>
+
+        <div class="code-card">
+          <div class="code-label">Action layer: combining health bars, YOLO monsters, and loot targets</div>
+          <pre><code>monsters = [d for d in hp_bars if not is_in_player_deadzone(d)]
+
+if not monsters:
+    monsters = [d for d in detections
+                 if d["class"] == "Monster"
+                 and d["conf"] >= MONSTER_CONF_THRESH
+                 and not is_in_player_deadzone(d)]
+
+currency = [d for d in detections
+             if d["class"] == "cur"
+             and d["conf"] >= CURRENCY_CONF_THRESH]</code></pre>
+        </div>
+
+        <p>This final layer is where the detector becomes useful behavior. Health bars get first priority for active combat, YOLO monster detections act as a fallback when those bars are not present, and currency gets handled separately as a looting signal. The result is less like a single detector and more like a small decision stack built around multiple visual cues.</p>
+      </div>
+    </section>
+  </article>
+</main>
+
+</body>
+</html>

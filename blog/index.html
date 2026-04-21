@@ -119,7 +119,7 @@ main {
 .blog-entry {
   display: flex;
   align-items: flex-start;
-  gap: 1.2rem;
+  gap: 0;
   padding: 1.1rem 1.2rem;
   border-radius: 8px;
   background-color: rgb(var(--bg-dark));
@@ -140,19 +140,6 @@ main {
 
 .blog-entry:hover .entry-title {
   color: rgb(var(--accent-light));
-}
-
-.entry-icon {
-  flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-  border-radius: 6px;
-  background: rgba(30, 100, 180, 0.18);
-  border: 1px solid rgba(120, 180, 255, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.3rem;
 }
 
 .entry-body {
@@ -218,7 +205,6 @@ main {
 
 @media (max-width: 600px) {
   .hero-text h1 { font-size: 2rem; }
-  .entry-icon { display: none; }
 }
 </style>
 </head>
@@ -246,10 +232,9 @@ main {
 
 <main>
 
-  <p class="blog-section-label">Projects</p>
+  <p class="blog-section-label">Path of Exile Auto</p>
 
   <a class="blog-entry" href="/blog/navigation/">
-    <div class="entry-icon">🧭</div>
     <div class="entry-body">
       <div class="entry-title">Path of Exile Navigation</div>
       <div class="entry-meta">New article</div>
@@ -257,21 +242,26 @@ main {
       <div class="entry-tags">
         <span class="tag">poe-auto</span>
         <span class="tag">navigation</span>
-        <span class="tag">tooling</span>
+        <span class="tag">minimap</span>
+        <span class="tag">pathfinding</span>
+        <span class="tag">map-stitching</span>
+        <span class="tag">computer-vision</span>
       </div>
     </div>
     <div class="entry-arrow">→</div>
   </a>
 
-  <a class="blog-entry" href="#">
-    <div class="entry-icon">🎯</div>
+  <a class="blog-entry" href="/blog/detection/">
     <div class="entry-body">
       <div class="entry-title">Loot &amp; Mob Object Detection</div>
-      <div class="entry-meta">Coming soon</div>
+      <div class="entry-meta">New article</div>
       <div class="entry-desc">The detection layer of Path of Exile Auto, centered on identifying loot, enemies, and interactable game objects from the live scene.</div>
       <div class="entry-tags">
         <span class="tag">poe-auto</span>
         <span class="tag">detection</span>
+        <span class="tag">loot</span>
+        <span class="tag">mobs</span>
+        <span class="tag">yolo</span>
         <span class="tag">computer-vision</span>
       </div>
     </div>
