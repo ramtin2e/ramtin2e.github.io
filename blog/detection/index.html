@@ -14,13 +14,11 @@
   --bg-dark: 0, 12, 28;
   --text-primary: white;
   --text-muted: rgba(255,255,255,0.68);
-  --accent: 30, 100, 180;
   --accent-light: 120, 180, 255;
-  --accent-dark: 10, 60, 120;
   --navbar-size: 60px;
 }
 
-html { font-family: Tinos, Georgia, Times, serif; background: radial-gradient(circle at top, rgba(20, 60, 110, 0.22), transparent 35%), rgb(var(--bg)); }
+html { font-family: Tinos, Georgia, Times, serif; background: rgb(var(--bg)); }
 body { color: var(--text-primary); }
 code { font-family: 'Source Code Pro', Courier New, monospace; }
 
@@ -35,79 +33,168 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
 .hamburger { display: none; cursor: pointer; }
 .nav-links { list-style: none; display: flex; gap: 1rem; }
 
-@media (max-width: 600px) {
-  .hamburger { display: block; font-size: 1.25rem; line-height: 32px; }
-  .nav-links {
-    position: absolute; top: var(--navbar-size); left: 0; right: 0;
-    display: none; flex-direction: column; gap: .5rem; width: 100%;
-    background-color: rgb(var(--bg-dark)); padding: 1rem;
-  }
-  .hamburger-checkbox:checked ~ .nav-links { display: flex; }
-}
-
 .hero {
+  position: relative;
+  height: 260px;
   overflow: hidden;
-  padding: 5rem 1rem 3rem;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  background:
-    radial-gradient(circle at 18% 18%, rgba(120, 180, 255, 0.18), transparent 26%),
-    radial-gradient(circle at 82% 0%, rgba(30, 100, 180, 0.26), transparent 32%),
-    linear-gradient(180deg, rgba(5, 18, 38, 0.88), rgba(0, 12, 28, 0.95));
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.hero-inner,
-.content {
-  width: min(920px, calc(100vw - 2rem));
-  margin: 0 auto;
+#heroBanner {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  z-index: 0;
 }
 
-.eyebrow,
+.hero-dim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 10, 22, 0.55);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-text {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: var(--text-primary);
+  width: min(900px, calc(100vw - 2rem));
+}
+
+.hero-kicker,
+.back-link,
+.notice-title,
 .section-label,
 .caption,
-.notice-title,
-.code-label,
-.back-link {
+.directory-title,
+.directory-meta,
+.directory-link,
+.code-label {
   font-family: 'Source Code Pro', Courier New, monospace;
 }
 
-.eyebrow {
-  display: inline-block;
-  margin-bottom: 1rem;
+.hero-kicker {
   color: rgb(var(--accent-light));
   letter-spacing: 0.14em;
   text-transform: uppercase;
   font-size: 0.78rem;
-  opacity: 0.72;
+  opacity: 0.78;
+  margin-bottom: 0.9rem;
 }
 
-.hero h1 {
+.hero-text h1 {
   font-family: Sen, Helvetica, sans-serif;
-  font-size: clamp(2.4rem, 4vw, 4rem);
-  letter-spacing: 0.02em;
-  margin-bottom: 0.75rem;
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.45rem;
 }
 
-.hero p {
-  max-width: 760px;
-  color: var(--text-muted);
-  font-size: 1.05rem;
+.hero-text p {
+  color: rgb(var(--accent-light));
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.content-shell {
+  width: min(1180px, calc(100vw - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0 4rem;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 1.5rem;
+}
+
+.project-directory {
+  position: sticky;
+  top: 1.25rem;
+  align-self: start;
+  padding: 1rem;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(8, 24, 46, 0.94), rgba(4, 16, 32, 0.94));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+}
+
+.directory-title {
+  color: rgb(var(--accent-light));
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  opacity: 0.72;
+  margin-bottom: 0.45rem;
+}
+
+.directory-name {
+  font-family: Sen, Helvetica, sans-serif;
+  font-size: 1.2rem;
+  margin-bottom: 0.35rem;
+}
+
+.directory-meta {
+  color: rgba(255,255,255,0.58);
+  font-size: 0.78rem;
   line-height: 1.6;
+  margin-bottom: 1rem;
 }
 
-.content { padding: 2.2rem 0 4rem; }
+.directory-list {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.directory-link {
+  display: block;
+  padding: 0.8rem 0.9rem;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.directory-link:hover {
+  background: rgba(120, 180, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(120, 180, 255, 0.18);
+  transform: translateX(2px);
+}
+
+.directory-link.active {
+  background: rgba(120, 180, 255, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(120, 180, 255, 0.28);
+}
+
+.directory-link strong {
+  display: block;
+  font-family: Sen, Helvetica, sans-serif;
+  font-size: 0.98rem;
+  margin-bottom: 0.22rem;
+}
+
+.directory-link span {
+  display: block;
+  color: rgba(255,255,255,0.56);
+  font-size: 0.74rem;
+  line-height: 1.5;
+}
+
+.article-main { min-width: 0; }
 
 .back-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.2rem;
   color: rgb(var(--accent-light));
   font-size: 0.9rem;
   opacity: 0.88;
 }
 
 .notice {
-  margin-bottom: 2rem;
+  margin-bottom: 1.4rem;
   padding: 1rem 1.1rem;
   border-radius: 12px;
   background: linear-gradient(180deg, rgba(12, 30, 56, 0.95), rgba(6, 18, 36, 0.95));
@@ -133,7 +220,7 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
 
 .article {
   display: grid;
-  gap: 2.4rem;
+  gap: 1.4rem;
 }
 
 .article-section {
@@ -234,8 +321,20 @@ pre {
 
 pre code { white-space: pre; }
 
+@media (max-width: 900px) {
+  .content-shell { grid-template-columns: 1fr; }
+  .project-directory { position: static; }
+}
+
 @media (max-width: 600px) {
-  .hero { padding-top: 3.8rem; }
+  .hamburger { display: block; font-size: 1.25rem; line-height: 32px; }
+  .nav-links {
+    position: absolute; top: var(--navbar-size); left: 0; right: 0;
+    display: none; flex-direction: column; gap: .5rem; width: 100%;
+    background-color: rgb(var(--bg-dark)); padding: 1rem;
+  }
+  .hamburger-checkbox:checked ~ .nav-links { display: flex; }
+  .hero-text h1 { font-size: 2rem; }
   .article-section { padding: 1.1rem; }
   .article-section p { font-size: 0.96rem; }
 }
@@ -253,63 +352,82 @@ pre code { white-space: pre; }
   </ul>
 </nav>
 
-<header class="hero">
-  <div class="hero-inner">
-    <p class="eyebrow">Path of Exile Auto</p>
+<div class="hero">
+  <canvas id="heroBanner"></canvas>
+  <div class="hero-dim"></div>
+  <div class="hero-text">
+    <p class="hero-kicker">Path of Exile Auto</p>
     <h1>Loot &amp; Mob Object Detection</h1>
-    <p>A breakdown of how the project moved from navigation-only mapping into a real-time detection stack for monsters, portals, and currency, along with the tradeoffs that still show up in live scenes.</p>
+    <p>writeups &middot; breakdowns &middot; technical notes</p>
   </div>
-</header>
+</div>
 
-<main class="content">
-  <a class="back-link" href="/blog/">&larr; Back to blog</a>
+<main class="content-shell">
+  <aside class="project-directory">
+    <p class="directory-title">Project Directory</p>
+    <p class="directory-name">Path of Exile Auto</p>
+    <p class="directory-meta">Browse the related posts for this project from inside the write-up.</p>
+    <div class="directory-list">
+      <a class="directory-link" href="/blog/navigation/">
+        <strong>Path of Exile Navigation</strong>
+        <span>Minimap parsing, pathfinding, stitching, and routing.</span>
+      </a>
+      <a class="directory-link active" href="/blog/detection/">
+        <strong>Loot &amp; Mob Object Detection</strong>
+        <span>YOLO detection, health-bar fallback logic, and combat signals.</span>
+      </a>
+    </div>
+  </aside>
 
-  <section class="notice">
-    <p class="notice-title">Disclaimer</p>
-    <p>This project was built for educational, self-teaching purposes around computer vision, mapping, and automation architecture. It was not used on live Path of Exile servers and was not used to violate the game's Terms of Service. The code is intentionally not published on GitHub because I do not want it repurposed into a cheat by other people.</p>
-  </section>
+  <div class="article-main">
+    <a class="back-link" href="/blog/">&larr; Back to blog</a>
 
-  <article class="article">
-    <section class="article-section">
-      <p class="section-label">What Worked</p>
-      <h2>Detection became good enough to drive real gameplay decisions</h2>
-      <p>Once navigation was stable, the next step was teaching the project how to understand what was happening on screen. That meant moving from minimap structure into object-level detection: monsters to attack, currency to pick up, and interactables such as portals that should be recognized instead of confused for combat targets.</p>
-      <p>The current detection stack is built around YOLO11n, trained for a narrow set of Path of Exile classes and then wrapped in a lightweight inference layer. In practice, this gave the project a surprisingly usable combat and loot signal. Most of the time, enemies and currency were picked up well enough for the controller to make immediate decisions about whether to fight, loot, or keep navigating.</p>
-      <div class="image-grid">
-        <figure class="figure narrow">
-          <img src="./detection-good.png" alt="Object detection collage showing monsters and currency being detected across multiple frames.">
-          <figcaption class="caption">Strong detection case from the current pipeline. This is closer to the normal success path, where loot and mob targets are picked up clearly enough for the controller to act on them.</figcaption>
-        </figure>
-      </div>
+    <section class="notice">
+      <p class="notice-title">Disclaimer</p>
+      <p>This project was built for educational, self-teaching purposes around computer vision, mapping, and automation architecture. It was not used on live Path of Exile servers and was not used to violate the game's Terms of Service. The code is intentionally not published on GitHub because I do not want it repurposed into a cheat by other people.</p>
     </section>
 
-    <section class="article-section">
-      <p class="section-label">What Still Breaks</p>
-      <h2>False positives and edge cases still exist</h2>
-      <p>Even with a stronger detector, the system is not perfect. One of the more persistent issues is false positives around UI-adjacent elements and health-bar-like shapes. In difficult scenes, the model or fallback logic can still latch onto things that look structured enough to matter but do not actually represent a valid combat target.</p>
-      <p>That is why the final implementation does not trust raw detections alone. Detection quality is high enough to be useful, but still noisy enough that it needs filtering, thresholds, deadzones, and fallback logic to stay reliable inside the full bot loop.</p>
-      <div class="image-grid">
-        <figure class="figure narrow">
-          <img src="./detection-bad.png" alt="Detection failure example showing false positives around health bars.">
-          <figcaption class="caption">Example of the inconsistencies that still exist. YOLO11 object detection is useful, but edge cases like false positives around health bars still need to be handled carefully.</figcaption>
-        </figure>
-      </div>
-    </section>
+    <article class="article">
+      <section class="article-section">
+        <p class="section-label">What Worked</p>
+        <h2>Detection became good enough to drive real gameplay decisions</h2>
+        <p>Once navigation was stable, the next step was teaching the project how to understand what was happening on screen. That meant moving from minimap structure into object-level detection: monsters to attack, currency to pick up, and interactables such as portals that should be recognized instead of confused for combat targets.</p>
+        <p>The current detection stack is built around YOLO11n, trained for a narrow set of Path of Exile classes and then wrapped in a lightweight inference layer. In practice, this gave the project a surprisingly usable combat and loot signal. Most of the time, enemies and currency were picked up well enough for the controller to make immediate decisions about whether to fight, loot, or keep navigating.</p>
+        <div class="image-grid">
+          <figure class="figure narrow">
+            <img src="./detection-good.png" alt="Object detection collage showing monsters and currency being detected across multiple frames.">
+            <figcaption class="caption">Strong detection case from the current pipeline. This is closer to the normal success path, where loot and mob targets are picked up clearly enough for the controller to act on them.</figcaption>
+          </figure>
+        </div>
+      </section>
 
-    <section class="article-section">
-      <p class="section-label">Implementation</p>
-      <h2>The detector is only one part of the system</h2>
-      <p>The implementation is split across a few layers. <code>ml/detect.py</code> wraps the trained YOLO model and converts its raw predictions into a smaller set of classes the rest of the project cares about. <code>combat_loop.py</code> then turns those detections into action: monsters become combat targets, currency becomes loot targets, and the controller decides whether navigation should pause while combat or pickup happens.</p>
-      <p>The other important tool in the stack is the health-bar detector. It acts as a stronger short-range combat signal in cases where raw object detection is less stable. That mix of learned detection plus rule-based filtering ended up being much more reliable than relying on only one source of truth.</p>
+      <section class="article-section">
+        <p class="section-label">What Still Breaks</p>
+        <h2>False positives and edge cases still exist</h2>
+        <p>Even with a stronger detector, the system is not perfect. One of the more persistent issues is false positives around UI-adjacent elements and health-bar-like shapes. In difficult scenes, the model or fallback logic can still latch onto things that look structured enough to matter but do not actually represent a valid combat target.</p>
+        <p>That is why the final implementation does not trust raw detections alone. Detection quality is high enough to be useful, but still noisy enough that it needs filtering, thresholds, deadzones, and fallback logic to stay reliable inside the full bot loop.</p>
+        <div class="image-grid">
+          <figure class="figure narrow">
+            <img src="./detection-bad.png" alt="Detection failure example showing false positives around health bars.">
+            <figcaption class="caption">Example of the inconsistencies that still exist. YOLO11 object detection is useful, but edge cases like false positives around health bars still need to be handled carefully.</figcaption>
+          </figure>
+        </div>
+      </section>
 
-      <div class="code-intro">
-        <p>The snippets below show the practical structure of the implementation: first the model wrapper that narrows the classes and filters detections, then the controller logic that decides how those detections get used in combat and loot behavior.</p>
-      </div>
+      <section class="article-section">
+        <p class="section-label">Implementation</p>
+        <h2>The detector is only one part of the system</h2>
+        <p>The implementation is split across a few layers. <code>ml/detect.py</code> wraps the trained YOLO model and converts its raw predictions into a smaller set of classes the rest of the project cares about. <code>combat_loop.py</code> then turns those detections into action: monsters become combat targets, currency becomes loot targets, and the controller decides whether navigation should pause while combat or pickup happens.</p>
+        <p>The other important tool in the stack is the health-bar detector. It acts as a stronger short-range combat signal in cases where raw object detection is less stable. That mix of learned detection plus rule-based filtering ended up being much more reliable than relying on only one source of truth.</p>
 
-      <div class="code-compare">
-        <div class="code-card">
-          <div class="code-label">Model wrapper: YOLO inference narrowed to project-relevant classes</div>
-          <pre><code>results = self.model.predict(
+        <div class="code-intro">
+          <p>The snippets below show the practical structure of the implementation: first the model wrapper that narrows the classes and filters detections, then the controller logic that decides how those detections get used in combat and loot behavior.</p>
+        </div>
+
+        <div class="code-compare">
+          <div class="code-card">
+            <div class="code-label">Model wrapper: YOLO inference narrowed to project-relevant classes</div>
+            <pre><code>results = self.model.predict(
     frame,
     conf=conf or self.conf,
     device=self.device,
@@ -324,25 +442,25 @@ for box in r.boxes:
     cls_id = int(box.cls[0])
     cls_name = self.names[cls_id]
     x1, y1, x2, y2 = [int(v) for v in box.xyxy[0]]</code></pre>
-        </div>
+          </div>
 
-        <p>This first layer keeps the runtime focused on only the classes the project actually needs: monsters, portals, and currency. That sounds small, but reducing the output space matters because it lowers noise and makes every later decision simpler.</p>
+          <p>This first layer keeps the runtime focused on only the classes the project actually needs: monsters, portals, and currency. That sounds small, but reducing the output space matters because it lowers noise and makes every later decision simpler.</p>
 
-        <div class="code-card">
-          <div class="code-label">Post-processing: center deadzone to avoid self-targeting noise</div>
-          <pre><code>if filter_player_center and cls_name == "Monster":
+          <div class="code-card">
+            <div class="code-label">Post-processing: center deadzone to avoid self-targeting noise</div>
+            <pre><code>if filter_player_center and cls_name == "Monster":
     box_cx = (x1 + x2) / 2
     box_cy = (y1 + y2) / 2
     if abs(box_cx - center_x) < (deadzone_x / 2) and \
        abs(box_cy - center_y) < (deadzone_y / 2):
         continue</code></pre>
-        </div>
+          </div>
 
-        <p>This is one of the simple but important protections in the pipeline. A lot of bad detections become much less harmful if the center of the screen is treated as a deadzone, because that area is dominated by the player and nearby effects.</p>
+          <p>This is one of the simple but important protections in the pipeline. A lot of bad detections become much less harmful if the center of the screen is treated as a deadzone, because that area is dominated by the player and nearby effects.</p>
 
-        <div class="code-card">
-          <div class="code-label">Action layer: combining health bars, YOLO monsters, and loot targets</div>
-          <pre><code>monsters = [d for d in hp_bars if not is_in_player_deadzone(d)]
+          <div class="code-card">
+            <div class="code-label">Action layer: combining health bars, YOLO monsters, and loot targets</div>
+            <pre><code>monsters = [d for d in hp_bars if not is_in_player_deadzone(d)]
 
 if not monsters:
     monsters = [d for d in detections
@@ -353,13 +471,245 @@ if not monsters:
 currency = [d for d in detections
              if d["class"] == "cur"
              and d["conf"] >= CURRENCY_CONF_THRESH]</code></pre>
-        </div>
+          </div>
 
-        <p>This final layer is where the detector becomes useful behavior. Health bars get first priority for active combat, YOLO monster detections act as a fallback when those bars are not present, and currency gets handled separately as a looting signal. The result is less like a single detector and more like a small decision stack built around multiple visual cues.</p>
-      </div>
-    </section>
-  </article>
+          <p>This final layer is where the detector becomes useful behavior. Health bars get first priority for active combat, YOLO monster detections act as a fallback when those bars are not present, and currency gets handled separately as a looting signal. The result is less like a single detector and more like a small decision stack built around multiple visual cues.</p>
+        </div>
+      </section>
+    </article>
+  </div>
 </main>
+
+<script id="Common" type="x-shader/x-fragment">
+    #define FNLfloat float
+    int _fnlFastFloor(FNLfloat f){return int(floor(f));}
+    float _fnlInterpQuintic(float t){return t*t*t*(t*(t*6.f-15.f)+10.f);}
+    float _fnlLerp(float a,float b,float t){return mix(a,b,t);}
+    const float GRADIENTS_3D[]=float[](0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,-1.f,0.f,-1.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,0.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,-1.f,0.f,-1.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,0.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,-1.f,0.f,-1.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,0.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,-1.f,0.f,-1.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,0.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,1.f,0.f,1.f,0.f,-1.f,0.f,-1.f,0.f,-1.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,0.f,1.f,-1.f,0.f,0.f,-1.f,-1.f,0.f,0.f,1.f,1.f,0.f,0.f,-1.f,1.f,0.f,-1.f,1.f,0.f,0.f,0.f,-1.f,-1.f,0.f);
+    const int PRIME_X=501125321;const int PRIME_Y=1136930381;const int PRIME_Z=1720413743;
+    int _fnlHash3D(int seed,int xPrimed,int yPrimed,int zPrimed){int hash=seed^xPrimed^yPrimed^zPrimed;hash*=0x27d4eb2d;return hash;}
+    struct fnl_state{int seed;float frequency;float domain_warp_amp;};
+    fnl_state fnlCreateState(int seed){fnl_state newState;newState.seed=seed;newState.frequency=0.01f;newState.domain_warp_amp=1.0f;return newState;}
+    float _fnlGradCoord3D(int seed,int xPrimed,int yPrimed,int zPrimed,float xd,float yd,float zd){int hash=_fnlHash3D(seed,xPrimed,yPrimed,zPrimed);hash^=hash>>15;hash&=63<<2;return xd*GRADIENTS_3D[hash]+yd*GRADIENTS_3D[hash|1]+zd*GRADIENTS_3D[hash|2];}
+    float _fnlSinglePerlin3D(int seed,FNLfloat x,FNLfloat y,FNLfloat z){int x0=_fnlFastFloor(x);int y0=_fnlFastFloor(y);int z0=_fnlFastFloor(z);float xd0=x-float(x0);float yd0=y-float(y0);float zd0=z-float(z0);float xd1=xd0-1.f;float yd1=yd0-1.f;float zd1=zd0-1.f;float xs=_fnlInterpQuintic(xd0);float ys=_fnlInterpQuintic(yd0);float zs=_fnlInterpQuintic(zd0);x0*=PRIME_X;y0*=PRIME_Y;z0*=PRIME_Z;int x1=x0+PRIME_X;int y1=y0+PRIME_Y;int z1=z0+PRIME_Z;float xf00=_fnlLerp(_fnlGradCoord3D(seed,x0,y0,z0,xd0,yd0,zd0),_fnlGradCoord3D(seed,x1,y0,z0,xd1,yd0,zd0),xs);float xf10=_fnlLerp(_fnlGradCoord3D(seed,x0,y1,z0,xd0,yd1,zd0),_fnlGradCoord3D(seed,x1,y1,z0,xd1,yd1,zd0),xs);float xf01=_fnlLerp(_fnlGradCoord3D(seed,x0,y0,z1,xd0,yd0,zd1),_fnlGradCoord3D(seed,x1,y0,z1,xd1,yd0,zd1),xs);float xf11=_fnlLerp(_fnlGradCoord3D(seed,x0,y1,z1,xd0,yd1,zd1),_fnlGradCoord3D(seed,x1,y1,z1,xd1,yd1,zd1),xs);float yf0=_fnlLerp(xf00,xf10,ys);float yf1=_fnlLerp(xf01,xf11,ys);return _fnlLerp(yf0,yf1,zs)*0.964921414852142333984375;}
+    float fnlGetNoise3D(fnl_state state,FNLfloat x,FNLfloat y,FNLfloat z){x*=state.frequency;y*=state.frequency;z*=state.frequency;return _fnlSinglePerlin3D(state.seed,x,y,z);}
+</script>
+<script id="Image" type="x-shader/x-fragment">
+    void mainImage( out vec4 U, in vec2 pos ) {
+        fnl_state state = fnlCreateState(1337);
+        state.frequency = .005f;
+        state.domain_warp_amp = 119.0;
+        float x = gl_FragCoord.x + iTime * 30.0;
+        float y = 50.f + iTime * 5.0;
+        float z = gl_FragCoord.y + iTime * 10.0;
+        float noise = fnlGetNoise3D(state, x, y, z) / 2.f + 0.5f;
+        float levels = 10.0;
+        float rounding_threshold = 0.0015;
+        float rounded = floor(noise * levels) / levels;
+        float rounding_error = abs(rounded - noise) / 2.0;
+        vec3 lines = vec3(0.47, 0.71, 1.0);
+        vec3 bg = vec3(0.0, 0.07, 0.16);
+        if (rounding_error < rounding_threshold) {
+            U = vec4(lines, 1.0);
+        } else {
+            U = vec4(bg, 1.0);
+        }
+    }
+</script>
+<script>
+function ShaderToyLite(canvasId) {
+    var hdr = `#version 300 es
+    #ifdef GL_ES
+    precision highp float;
+    precision highp int;
+    precision mediump sampler3D;
+    #endif
+    #define texture2D texture
+    uniform vec3      iResolution;
+    uniform float     iTime;
+    uniform float     iTimeDelta;
+    uniform float     iFrameRate;
+    uniform int       iFrame;
+    uniform float     iChannelTime[4];
+    uniform vec3      iChannelResolution[4];
+    uniform vec4      iMouse;
+    uniform sampler2D iChannel0;
+    uniform sampler2D iChannel1;
+    uniform sampler2D iChannel2;
+    uniform sampler2D iChannel3;
+    uniform vec4      iDate;
+    uniform float     iSampleRate;
+    out vec4          frag_out_color;
+    void mainImage( out vec4 c, in vec2 f );
+    void main( void ) {
+        vec4 color = vec4(0.0,0.0,0.0,0.0);
+        mainImage( color, gl_FragCoord.xy );
+        frag_out_color = vec4(color);
+    }`;
+    const basicVertexShader = `#version 300 es
+    #ifdef GL_ES
+    precision highp float;
+    #endif
+    in vec2 vertexInPosition;
+    void main() { gl_Position = vec4(vertexInPosition, 0.0, 1.0); }`;
+    const quadVertices = new Float32Array([-1,-1,1,-1,-1,1,1,1,-1,1,1,-1]);
+    const canvas = document.getElementById(canvasId);
+    const opts = {alpha:false,depth:false,stencil:false,antialias:true,powerPreference:"high-performance"};
+    var gl = canvas.getContext('webgl2', opts);
+    var isPlaying=false, firstDrawTime=0, prevDrawTime=0, iFrame=0;
+    var iMouse={x:0,y:0,clickX:0,clickY:0};
+    var common="", sourcecode={}, ichannels={}, atexture={}, btexture={};
+    var aframebuf={}, bframebuf={}, program={}, location={}, flip={};
+    var quadBuffer;
+
+    function resizeCanvas() {
+        var w = canvas.parentElement.offsetWidth || window.innerWidth;
+        var h = canvas.parentElement.offsetHeight || window.innerHeight;
+        if (canvas.width !== w || canvas.height !== h) {
+            canvas.width = w; canvas.height = h;
+            if (gl) gl.viewport(0, 0, w, h);
+        }
+    }
+
+    var setup = () => {
+        resizeCanvas();
+        gl.getExtension('OES_texture_float_linear');
+        gl.getExtension('EXT_color_buffer_float');
+        ['A','B','C','D','Image'].forEach(key => {
+            sourcecode[key]=""; ichannels[key]={}; program[key]=null; location[key]={};
+            if(key!='Image'){
+                atexture[key]=createTexture(); btexture[key]=createTexture();
+                aframebuf[key]=createFrameBuffer(atexture[key]);
+                bframebuf[key]=createFrameBuffer(btexture[key]);
+                flip[key]=false;
+            }
+        });
+        quadBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, quadVertices, gl.STATIC_DRAW);
+        window.addEventListener('resize', resizeCanvas);
+        setTimeout(resizeCanvas, 100);
+    };
+
+    var createTexture = () => {
+        var t = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, t);
+        gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA32F,canvas.width||1,canvas.height||1,0,gl.RGBA,gl.FLOAT,null);
+        gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+        return t;
+    };
+
+    var createFrameBuffer = (texture) => {
+        var fb = gl.createFramebuffer();
+        gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,texture,0);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        return fb;
+    };
+
+    var compileProgram = (key) => {
+        var vert = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vert, basicVertexShader); gl.compileShader(vert);
+        if(!gl.getShaderParameter(vert,gl.COMPILE_STATUS)){console.error('Vert:',gl.getShaderInfoLog(vert));return null;}
+        var frag = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(frag, hdr + common + sourcecode[key]); gl.compileShader(frag);
+        if(!gl.getShaderParameter(frag,gl.COMPILE_STATUS)){console.error('Frag:',gl.getShaderInfoLog(frag));return null;}
+        var prog = gl.createProgram();
+        gl.attachShader(prog,vert); gl.attachShader(prog,frag); gl.linkProgram(prog);
+        if(!gl.getProgramParameter(prog,gl.LINK_STATUS)){console.error('Link:',gl.getProgramInfoLog(prog));return null;}
+        var L = location[key];
+        L.iResolution=gl.getUniformLocation(prog,"iResolution");
+        L.iTime=gl.getUniformLocation(prog,"iTime");
+        L.iTimeDelta=gl.getUniformLocation(prog,"iTimeDelta");
+        L.iFrameRate=gl.getUniformLocation(prog,"iFrameRate");
+        L.iFrame=gl.getUniformLocation(prog,"iFrame");
+        L.iChannelTime=gl.getUniformLocation(prog,"iChannelTime[0]");
+        L.iChannelResolution=gl.getUniformLocation(prog,"iChannelResolution[0]");
+        L.iChannel0=gl.getUniformLocation(prog,"iChannel0");
+        L.iChannel1=gl.getUniformLocation(prog,"iChannel1");
+        L.iChannel2=gl.getUniformLocation(prog,"iChannel2");
+        L.iChannel3=gl.getUniformLocation(prog,"iChannel3");
+        L.iMouse=gl.getUniformLocation(prog,"iMouse");
+        L.iDate=gl.getUniformLocation(prog,"iDate");
+        L.iSampleRate=gl.getUniformLocation(prog,"iSampleRate");
+        L.vertexInPosition=gl.getAttribLocation(prog,"vertexInPosition");
+        return prog;
+    };
+
+    var setShader = (config, key) => {
+        if(config){ if(config.source){sourcecode[key]=config.source; program[key]=compileProgram(key);} }
+        else { sourcecode[key]=""; program[key]=null; }
+    };
+
+    var repeat = (n,arr) => { let r=[]; for(let i=0;i<n;i++) r=[...r,...arr]; return r; };
+
+    var draw = () => {
+        var now = isPlaying ? Date.now() : prevDrawTime;
+        var date = new Date(now);
+        if(firstDrawTime==0) firstDrawTime=now;
+        var iTimeDelta=(now-prevDrawTime)*0.001;
+        var iTime=(now-firstDrawTime)*0.001;
+        var iDate=[date.getFullYear(),date.getMonth(),date.getDate(),date.getTime()*0.001];
+        var iCT=new Float32Array(repeat(4,[iTime]));
+        var iCR=new Float32Array(repeat(4,[canvas.width,canvas.height,0]));
+        ['A','B','C','D','Image'].forEach(key => {
+            if(!program[key]) return;
+            if(key==="Image") gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+            else gl.bindFramebuffer(gl.FRAMEBUFFER, flip[key]?bframebuf[key]:aframebuf[key]);
+            for(let i=0;i<4;i++){
+                var ck=ichannels[key][i];
+                if(ck){ gl.activeTexture(gl["TEXTURE"+i]); gl.bindTexture(gl.TEXTURE_2D,flip[ck]?atexture[ck]:btexture[ck]); }
+            }
+            gl.useProgram(program[key]);
+            var L=location[key];
+            gl.uniform3f(L.iResolution,canvas.width,canvas.height,1);
+            gl.uniform1f(L.iTime,iTime);
+            gl.uniform1f(L.iTimeDelta,iTimeDelta);
+            gl.uniform1f(L.iFrameRate,60);
+            gl.uniform1i(L.iFrame,iFrame);
+            gl.uniform1fv(L.iChannelTime,iCT);
+            gl.uniform3fv(L.iChannelResolution,iCR);
+            gl.uniform1i(L.iChannel0,0); gl.uniform1i(L.iChannel1,1);
+            gl.uniform1i(L.iChannel2,2); gl.uniform1i(L.iChannel3,3);
+            gl.uniform4f(L.iMouse,iMouse.x,iMouse.y,iMouse.clickX,iMouse.clickY);
+            gl.uniform4f(L.iDate,iDate[0],iDate[1],iDate[2],iDate[3]);
+            gl.uniform1f(L.iSampleRate,44100);
+            gl.viewport(0,0,canvas.width,canvas.height);
+            gl.bindBuffer(gl.ARRAY_BUFFER,quadBuffer);
+            gl.vertexAttribPointer(L.vertexInPosition,2,gl.FLOAT,false,0,0);
+            gl.enableVertexAttribArray(L.vertexInPosition);
+            gl.drawArrays(gl.TRIANGLES,0,6);
+            if(key!='Image') flip[key]=!flip[key];
+        });
+        prevDrawTime=now; iFrame++;
+    };
+
+    var animate = () => { if(isPlaying){draw(); requestAnimationFrame(animate);} };
+
+    this.setCommon = (src) => { common=src||""; };
+    this.setImage = (cfg) => setShader(cfg,'Image');
+    this.play = () => {
+        if(!isPlaying){
+            isPlaying=true;
+            var now=Date.now();
+            var elapsed=prevDrawTime-firstDrawTime;
+            firstDrawTime=now-elapsed; prevDrawTime=now;
+            animate();
+        }
+    };
+
+    setup();
+}
+
+var toy = new ShaderToyLite("heroBanner");
+toy.setCommon(document.getElementById("Common").innerText);
+toy.setImage({source: document.getElementById("Image").innerText});
+toy.play();
+</script>
 
 </body>
 </html>
