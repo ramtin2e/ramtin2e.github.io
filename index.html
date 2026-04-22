@@ -109,15 +109,13 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
 .profile img { width: 100%; height: 100%; object-fit: cover; }
 
 /* PROJECT CARDS */
-main { margin: auto; padding: 1rem; max-width: 1100px; color: var(--text-primary); }
+main { margin: auto; padding: 1rem; max-width: 2400px; color: var(--text-primary); }
 
-.projects { display: flex; flex-direction: column; margin-bottom: 1rem; gap: 1rem; }
+.projects { display: flex; flex-direction: column; margin-bottom: 2rem; gap: 1rem; }
 
 .gallery {
-  display: flex;
-  gap: 1.5rem;
-  overflow-x: auto;
-  padding-bottom: 0.5rem;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(750px, 1fr));
+  grid-auto-rows: auto; grid-gap: 2rem; align-items: stretch;
 }
 
 .link-card {
@@ -125,9 +123,7 @@ main { margin: auto; padding: 1rem; max-width: 1100px; color: var(--text-primary
   background-color: rgb(var(--bg-dark)); background-image: none;
   background-size: 400%; border-radius: 8px; background-position: 100%;
   transition: background-position .6s cubic-bezier(.22,1,.36,1);
-  box-shadow: inset 0 0 0 1px #ffffff1a;
-  min-width: 550px; width: 550px; aspect-ratio: 16/9;
-  flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px #ffffff1a; width: 100%; aspect-ratio: 16/9;
 }
 .link-card > .hl {
   position: absolute; background: rgb(var(--bg-dark));
@@ -166,8 +162,8 @@ main { margin: auto; padding: 1rem; max-width: 1100px; color: var(--text-primary
   opacity: 1;
 }
 
-@media screen and (max-width: 700px) {
-  .link-card { min-width: min(90vw, 480px); width: min(90vw, 480px); }
+@media screen and (max-width: 800px) {
+  .gallery { grid-template-columns: 1fr; }
   .profile { width: 180px; height: 180px; }
 }
 </style>
