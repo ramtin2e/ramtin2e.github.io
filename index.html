@@ -114,8 +114,8 @@ main { margin: auto; padding: 1rem; max-width: 800px; color: var(--text-primary)
 .projects { display: flex; flex-direction: column; margin-bottom: 1rem; gap: 1rem; }
 
 .gallery {
-  display: grid; grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto; grid-gap: 1rem; align-items: stretch;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: auto; grid-gap: 1rem; align-items: stretch;
 }
 
 .link-card {
@@ -143,11 +143,27 @@ main { margin: auto; padding: 1rem; max-width: 800px; color: var(--text-primary)
 .link-card:is(:hover,:focus-within) { background-position: 0; background-image: var(--accent-gradient); }
 .link-card:is(:hover,:focus-within) h2 { color: rgb(var(--accent-light)); }
 .link-card:is(:hover,:focus-within) .hl { opacity: .75; }
-.spangrid { grid-column: 1 / span 2; }
-.card-img { border-radius: 8px; object-fit: cover; width: 100%; height: 100%; }.soc-img { object-fit: cover; object-position: center 15%; }
+.card-img { border-radius: 8px; object-fit: cover; width: 100%; height: 100%; }
+.soc-img { object-fit: cover; object-position: center 15%; }
+
+.fade-stack {
+  position: absolute;
+  inset: 0;
+}
+
+.fade-stack img {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.fade-stack img.active {
+  opacity: 1;
+}
 
 @media screen and (max-width: 600px) {
-  .link-card { grid-column: 1 / span 2; }
+  .gallery { grid-template-columns: 1fr; }
   .profile { width: 180px; height: 180px; }
 }
 </style>
@@ -187,25 +203,35 @@ main { margin: auto; padding: 1rem; max-width: 800px; color: var(--text-primary)
   <section class="projects">
     <h1>Security</h1>
     <div class="gallery">
-      <div class="link-card spangrid">
+      <div class="link-card">
         <img alt="SOC Automation diagram" class="card-img soc-img" src="imgs/SOC.png">
         <a class="hl" href="https://github.com/ramtin2e/SOC-Automation">
           <h2>SOC Automation</h2>
           <p>End-to-end SOC automation pipeline using Wazuh, Shuffle, and TheHive for alert triage, IOC enrichment, and responsive actions</p>
         </a>
       </div>
-      <div class="link-card spangrid">
+      <div class="link-card">
         <img alt="ELK SIEM dashboard" class="card-img" src="imgs/ELK.png">
         <a class="hl" href="https://github.com/ramtin2e/ELK-SIEM">
           <h2>ELK SIEM</h2>
           <p>Security Information and Event Management system built on the Elastic Stack — ingest, detect, and visualize threats at scale</p>
         </a>
       </div>
-      <div class="link-card spangrid">
+      <div class="link-card">
         <img alt="RADAR vulnerability scanner" class="card-img" src="imgs/radar.png">
         <a class="hl" href="https://github.com/ramtin2e/radar-vulnscanner">
           <h2>RADAR</h2>
           <p>Local machine security scanner — port scanning, file permission audits, kernel-level socket inspection, and sysctl hardening checks</p>
+        </a>
+      </div>
+      <div class="link-card">
+        <div class="fade-stack" id="poeProjectFade">
+          <img alt="Path of Exile navigation map view" class="card-img active" src="blog/navigation/new-system-1.png">
+          <img alt="Path of Exile loot and mob detection view" class="card-img" src="blog/detection/detection-good.png">
+        </div>
+        <a class="hl" href="/blog/navigation/">
+          <h2>POE CV and Pathfinding Engine</h2>
+          <p>Computer vision and pathfinding pipeline for Path of Exile, combining stitched minimap routing with object detection-driven gameplay signals</p>
         </a>
       </div>
     </div>
@@ -473,11 +499,19 @@ var toy = new ShaderToyLite("myCanvas");
 toy.setCommon(document.getElementById("Common").innerText);
 toy.setImage({source: document.getElementById("Image").innerText});
 toy.play();
+
+(function () {
+    var container = document.getElementById("poeProjectFade");
+    if (!container) return;
+    var images = container.querySelectorAll("img");
+    var current = 0;
+    setInterval(function () {
+        images[current].classList.remove("active");
+        current = (current + 1) % images.length;
+        images[current].classList.add("active");
+    }, 5000);
+})();
 </script>
 
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> origin/main
