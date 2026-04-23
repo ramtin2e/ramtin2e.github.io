@@ -56,22 +56,25 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
   justify-content: center;
 }
 
-/* Canvas fills the entire hero */
+/* Global background canvas */
 #myCanvas {
-  position: absolute;
+  position: fixed;
   top: 0; left: 0;
-  width: 100% !important;
-  height: 100% !important;
+  width: 100vw !important;
+  height: 100vh !important;
   display: block;
-  z-index: 0;
+  z-index: -2;
+  pointer-events: none;
 }
 
-/* Dim overlay */
+/* Global dim overlay */
 .shader-dim {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
   background: rgba(0, 10, 22, 0.45);
-  z-index: 1;
+  z-index: -1;
   pointer-events: none;
 }
 
@@ -169,6 +172,8 @@ main { margin: auto; padding: 1rem; max-width: 2400px; color: var(--text-primary
 </style>
 </head>
 <body>
+<canvas id="myCanvas"></canvas>
+<div class="shader-dim"></div>
 
 <nav class="navbar">
   <a href="/" class="logo">ramtin.rs</a>
@@ -181,8 +186,6 @@ main { margin: auto; padding: 1rem; max-width: 2400px; color: var(--text-primary
 </nav>
 
 <section class="pagefill">
-  <canvas id="myCanvas"></canvas>
-  <div class="shader-dim"></div>
   <div class="me">
     <div class="bio">
       <div class="profile">
@@ -224,6 +227,13 @@ main { margin: auto; padding: 1rem; max-width: 2400px; color: var(--text-primary
           <p>Local machine security scanner — port scanning, file permission audits, kernel-level socket inspection, and sysctl hardening checks</p>
         </a>
       </div>
+      <div class="link-card">
+        <img alt="GRCA Compliance Dashboard" class="card-img" src="imgs/GRCA.png">
+        <a class="hl" href="https://github.com/ramtin2e/GRCA">
+          <h2>GRCA</h2>
+          <p>Governance, Risk, and Compliance automation tool — analyze compliance gaps and map them to MITRE ATT&CK techniques</p>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -241,13 +251,6 @@ main { margin: auto; padding: 1rem; max-width: 2400px; color: var(--text-primary
         </a>
       </div>
 
-      <div class="link-card">
-        <img alt="GRCA Compliance Dashboard" class="card-img" src="imgs/GRCA.png">
-        <a class="hl" href="/GRCA/">
-          <h2>GRCA</h2>
-          <p>Governance, Risk, and Compliance automation tool — analyze compliance gaps and map them to MITRE ATT&CK techniques</p>
-        </a>
-      </div>
     </div>
   </section>
 </main>
