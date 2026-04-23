@@ -204,6 +204,16 @@ main { margin: auto; padding: 1rem; max-width: 2400px; color: var(--text-primary
     <h1>Security</h1>
     <div class="gallery">
       <div class="link-card">
+        <div class="fade-stack" id="cloudguardFade">
+          <img alt="Cloudguard HTML report" class="card-img active" src="imgs/html_report.png">
+          <img alt="Cloudguard terminal output" class="card-img" src="imgs/terminal_output.png">
+        </div>
+        <a class="hl" href="https://github.com/ramtin2e/Cloudguard.git">
+          <h2>Cloudguard</h2>
+          <p>CloudGuard CSPM tool</p>
+        </a>
+      </div>
+      <div class="link-card">
         <img alt="SOC Automation diagram" class="card-img soc-img" src="imgs/SOC.png">
         <a class="hl" href="https://github.com/ramtin2e/SOC-Automation">
           <h2>SOC Automation</h2>
@@ -515,15 +525,17 @@ toy.setImage({source: document.getElementById("Image").innerText});
 toy.play();
 
 (function () {
-    var container = document.getElementById("poeProjectFade");
-    if (!container) return;
-    var images = container.querySelectorAll("img");
-    var current = 0;
-    setInterval(function () {
-        images[current].classList.remove("active");
-        current = (current + 1) % images.length;
-        images[current].classList.add("active");
-    }, 5000);
+    var containers = document.querySelectorAll(".fade-stack");
+    containers.forEach(function(container) {
+        var images = container.querySelectorAll("img");
+        if (images.length === 0) return;
+        var current = 0;
+        setInterval(function () {
+            images[current].classList.remove("active");
+            current = (current + 1) % images.length;
+            images[current].classList.add("active");
+        }, 5000);
+    });
 })();
 </script>
 
