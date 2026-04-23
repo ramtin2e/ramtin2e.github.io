@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRCA - Compliance Gap Analysis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0a0b14;
+            --bg-secondary: #111222;
+            --bg-card: rgba(18, 20, 38, 0.7);
+            --text-primary: #e8eaf6;
+            --text-secondary: #8b8fa8;
+            --accent: #6C5CE7;
+            --accent-light: #a29bfe;
+            --cyan: #00D2FF;
+            --critical: #ff4757;
+            --high: #ff6b35;
+            --medium: #ffa502;
+            --low: #2ed573;
+            --implemented: #00d2ff;
+            --radius: 12px;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { font-size: 15px; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Background Glow */
+        .bg-glow { position: fixed; border-radius: 50%; filter: blur(120px); opacity: 0.4; pointer-events: none; z-index: 0; }
+        .bg-glow-1 { width: 600px; height: 600px; top: -200px; left: -100px; background: radial-gradient(circle, rgba(108,92,231,0.3) 0%, transparent 70%); }
+        .bg-glow-2 { width: 500px; height: 500px; bottom: -150px; right: -100px; background: radial-gradient(circle, rgba(0,210,255,0.2) 0%, transparent 70%); }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1.5rem;
+            height: 60px;
+            background: rgba(10, 11, 20, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(100, 108, 255, 0.08);
+        }
+
+        .logo { display: flex; align-items: center; gap: 0.75rem; font-weight: 600; font-size: 1.1rem; color: var(--text-primary); text-decoration: none; }
+        .logo svg rect { stroke: url(#logoGrad); }
+        .logo svg path { stroke: url(#logoGrad); }
+
+        .header-right { display: flex; align-items: center; gap: 1rem; }
+        .version-badge { font-size: 0.7rem; padding: 0.25rem 0.5rem; background: rgba(108,92,231,0.15); border-radius: 4px; color: var(--accent-light); }
+
+        /* Main */
+        main { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 3rem 1.5rem; }
+
+        .section { margin-bottom: 2.5rem; }
+        .section h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .section .subtitle { color: var(--text-secondary); font-size: 1rem; margin-bottom: 1.5rem; }
+
+        /* Card */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(100, 108, 255, 0.08);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(12px);
+        }
+
+        .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        
+        @media (max-width: 700px) { .upload-grid { grid-template-columns: 1fr; } }
+
+        .card h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: var(--text-primary); }
+
+        /* Dropzone */
+        .dropzone {
+            border: 2px dashed rgba(108, 92, 231, 0.3);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .dropzone:hover { border-color: var(--accent); background: rgba(108, 92, 231, 0.05); }
+        .dropzone-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+        .dropzone p { color: var(--text-secondary); }
+        .dropzone . Formats { font-size: 0.75rem; margin-top: 0.5rem; opacity: 0.6; }
+
+        /* Sample Buttons */
+        .sample-btn {
+            background: rgba(0, 210, 255, 0.1);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            color: var(--cyan);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .sample-btn:hover { background: rgba(0, 210, 255, 0.2); }
+
+        /* Results */
+        .results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        @media (max-width: 800px) { .results-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        .stat-card {
+            background: rgba(18, 20, 38, 0.6);
+            border: 1px solid rgba(100, 108, 255, 0.08);
+            border-radius: 10px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+        .stat-value { font-size: 2rem; font-weight: 700; }
+        .stat-label { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem; }
+
+        .score-ring {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+        .score-ring svg { transform: rotate(-90deg); }
+        .score-ring circle { fill: none; stroke-width: 8; }
+        .score-ring .bg { stroke: rgba(255,255,255,0.1); }
+        .score-ring .progress {
+            stroke: var(--accent);
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease;
+        }
+        .score-ring .value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .exec-summary { 
+            background: rgba(108, 92, 231, 0.1);
+            border-left: 3px solid var(--accent);
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 1.5rem;
+        }
+        .exec-summary h3 { font-size: 0.75rem; color: var(--accent-light); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
+        .exec-summary p { color: var(--text-secondary); }
+
+        /* Charts */
+        .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        @media (max-width: 800px) { .charts-row { grid-template-columns: 1fr; } }
+
+        .chart-card { background: var(--bg-card); border: 1px solid rgba(100, 108, 255, 0.08); border-radius: var(--radius); padding: 1.25rem; }
+        .chart-card h3 { font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+
+        .bar-chart { display: flex; flex-direction: column; gap: 0.75rem; }
+        .bar-item { display: flex; align-items: center; gap: 0.75rem; }
+        .bar-label { width: 90px; font-size: 0.8rem; color: var(--text-secondary); }
+        .bar-track { flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+        .bar-value { font-size: 0.8rem; width: 40px; text-align: right; }
+
+        .tier-bars .bar-fill { background: var(--critical); }
+
+        /* Findings Table */
+        .findings-table { width: 100%; border-collapse: collapse; }
+        .findings-table th { text-align: left; padding: 0.75rem 1rem; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .findings-table td { padding: 0.875rem 1rem; font-size: 0.9rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .findings-table tr:hover td { background: rgba(255,255,255,0.02); }
+        .status-badge { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem; text-transform: uppercase; }
+        .status-missing { background: rgba(255, 71, 87, 0.15); color: var(--critical); }
+        .status-partial { background: rgba(255, 165, 2, 0.15); color: var(--medium); }
+        .status-implemented { background: rgba(0, 210, 255, 0.15); color: var(--implemented); }
+
+        /* Responsive Nav */
+        @media (max-width: 600px) {
+            .hamburger { display: block; }
+            .nav-links { display: none; }
+        }
+
+        .loading { text-align: center; padding: 3rem; color: var(--text-secondary); }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <header class="header">
+        <a href="/" class="logo">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <defs><linearGradient id="logoGrad" x1="0" y1="0" x2="28" y2="28">
+                    <stop stop-color="#6C5CE7"/><stop offset="1" stop-color="#00D2FF"/>
+                </linearGradient></defs>
+                <rect x="2" y="2" width="24" height="24" rx="6" stroke="url(#logoGrad)" stroke-width="2.5"/>
+                <path d="M9 14h10M14 9v10" stroke="url(#logoGrad)" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            GRCA
+        </a>
+        <div class="header-right">
+            <span class="version-badge">v0.1.0</span>
+        </div>
+    </header>
+
+    <main>
+        <!-- Upload Section -->
+        <section id="upload-section" class="section">
+            <h1>Compliance Gap Analysis</h1>
+            <p class="subtitle">Upload a GRC report or run a sample to identify compliance gaps and map them to MITRE ATT&CK</p>
+            
+            <div class="upload-grid">
+                <div class="card">
+                    <h2>Upload Report</h2>
+                    <div class="dropzone" id="dropzone">
+                        <div class="dropzone-icon">📄</div>
+                        <p>Drag & drop your report here<br>or click to browse</p>
+                        <p class="formats">CSV, JSON, XLSX</p>
+                        <input type="file" id="file-input" accept=".csv,.json,.xlsx,.xls" hidden>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>Or Run Sample</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">Run the built-in NIST CSF 2.0 sample assessment to see the analysis in action.</p>
+                    <button class="sample-btn" onclick="runSample()">Run Sample (NIST CSF 2.0)</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="results-section" class="section hidden">
+            <h1>Analysis Results</h1>
+            
+            <div class="results-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="score-value">0%</div>
+                    <div class="stat-label">Compliance Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="gaps-value">0</div>
+                    <div class="stat-label">Critical Gaps</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="attacks-value">0</div>
+                    <div class="stat-label">ATT&CK Mapped</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="level-value">1</div>
+                    <div class="stat-label">Maturity Level</div>
+                </div>
+            </div>
+
+            <div class="exec-summary">
+                <h3>Executive Summary</h3>
+                <p id="summary-text">Analysis complete.</p>
+            </div>
+
+            <div class="charts-row">
+                <div class="chart-card">
+                    <h3>By Category</h3>
+                    <div class="bar-chart" id="category-bars"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>By Tier</h3>
+                    <div class="bar-chart" id="tier-bars"></div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 1.5rem;">
+                <h2>Gap Findings</h2>
+                <table class="findings-table">
+                    <thead>
+                        <tr>
+                            <th>Control</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Tier</th>
+                        </tr>
+                    </thead>
+                    <tbody id="findings-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <div id="loading" class="loading hidden">Analyzing...</div>
+    </main>
+
+    <script>
+// ============ Client-Side GRCA Engine ============
+const GRCA = (function() {
+    const TIER_WEIGHTS = { 'REQUIRED': 3, 'DESIRED': 2, 'NICE_TO_HAVE': 1 };
+    const CONTROL_CATEGORIES = { 'PR': 'Protect', 'DE': 'Detect', 'RS': 'Respond', 'RC': 'Recover', 'GV': 'Govern', 'ID': 'Identify' };
+    
+    const ATTACK_MAPPINGS = {
+        'PR.AA-01': ['T1078', 'T1110'], 'PR.AA-04': ['T1110'], 'PR.AA-05': ['T1078', 'TD0010'],
+        'PR.DS-01': ['T1485', 'T1486'], 'PR.DS-10': ['T1005', 'T1022'], 'PR.PS-02': ['T1190'],
+        'PR.PS-06': ['T1195', 'T1194'], 'DE.CM-06': ['T1119', 'T1537'], 'DE.CM-09': ['T1106', 'T1112'],
+        'RS.MA-01': ['T1059'], 'RS.MI-02': ['T1486'], 'RC.RP-01': ['T1490'], 'ID.RA-01': ['T1582', 'T1583']
+    };
+
+    const DEFAULT_PROFILE = {
+        'PR.AA-01': 'REQUIRED', 'PR.AA-02': 'DESIRED', 'PR.AA-03': 'REQUIRED', 'PR.AA-04': 'REQUIRED', 'PR.AA-05': 'REQUIRED',
+        'PR.DS-01': 'REQUIRED', 'PR.DS-02': 'REQUIRED', 'PR.DS-10': 'DESIRED', 'PR.PS-01': 'DESIRED', 'PR.PS-02': 'REQUIRED',
+        'PR.PS-06': 'DESIRED', 'PR.IR-01': 'DESIRED', 'PR.IR-04': 'NICE_TO_HAVE', 'DE.CM-01': 'REQUIRED', 'DE.CM-02': 'NICE_TO_HAVE',
+        'DE.CM-03': 'REQUIRED', 'DE.CM-06': 'DESIRED', 'DE.CM-09': 'REQUIRED', 'DE.AE-02': 'REQUIRED', 'DE.AE-06': 'DESIRED',
+        'RS.MA-01': 'REQUIRED', 'RS.AN-03': 'DESIRED', 'RS.MI-01': 'REQUIRED', 'RS.MI-02': 'REQUIRED', 'RC.RP-01': 'REQUIRED',
+        'GV.RM-01': 'DESIRED', 'ID.RA-01': 'REQUIRED'
+    };
+
+    const REMEDIATION = {
+        'PR.AA-01': { title: 'Deploy MFA for all users', effort: 'Low', timeline: '1-2 weeks', quickWin: true },
+        'PR.AA-05': { title: 'Implement RBAC model', effort: 'High', timeline: '1-2 months', quickWin: false },
+        'PR.DS-01': { title: 'Encrypt file shares', effort: 'Medium', timeline: '2-3 weeks', quickWin: true },
+        'PR.PS-02': { title: 'Automated patch management', effort: 'Medium', timeline: '3-4 weeks', quickWin: true },
+        'RS.MA-01': { title: 'Incident response testing', effort: 'High', timeline: '1 month', quickWin: false },
+        'ID.RA-01': { title: 'Vulnerability scanning program', effort: 'High', timeline: '1-2 months', quickWin: false }
+    };
+
+    function getCategory(id) { return CONTROL_CATEGORIES[id ? id.substring(0, 2) : ''] || 'Unknown'; }
+
+    function parseCSV(content) {
+        const result = Papa.parse(content, { header: true, skipEmptyLines: true });
+        return result.data;
+    }
+
+    function parseJSON(content) {
+        try { return JSON.parse(content); } catch(e) { return []; }
+    }
+
+    function runAnalysis(controls, profile) {
+        const gaps = [], partial = [], implemented = [];
+        let totalAttack = 0;
+
+        controls.forEach(ctrl => {
+            const id = ctrl.Control_ID || ctrl.control_id || ctrl.ID || '';
+            const status = ctrl.Status || ctrl.status || 'Missing';
+            const tier = profile[id] || 'DESIRED';
+            
+            const find = {
+                id, name: ctrl.Control_Name || ctrl.name || id,
+                category: ctrl.Category || ctrl.category || getCategory(id),
+                status, tier, tierWeight: TIER_WEIGHTS[tier],
+                severity: ctrl.Severity || ctrl.severity || 'Medium',
+                notes: ctrl.Notes || ctrl.notes || '',
+                attack: ATTACK_MAPPINGS[id] || []
+            };
+            if (find.attack.length) totalAttack += find.attack.length;
+            
+            if (status === 'Missing') gaps.push(find);
+            else if (status === 'Partial') partial.push(find);
+            else implemented.push(find);
+        });
+
+        let score = 0, totalW = 0;
+        [...gaps, ...partial, ...implemented].forEach(f => {
+            totalW += f.tierWeight;
+            score += (f.status === 'Implemented' ? 1 : f.status === 'Partial' ? 0.5 : 0) * f.tierWeight;
+        });
+        const finalScore = totalW ? Math.round((score / totalW) * 100) : 0;
+        
+        const catGroups = {};
+        [...gaps, ...partial, ...implemented].forEach(f => {
+            if (!catGroups[f.category]) catGroups[f.category] = { Implemented: 0, Partial: 0, Missing: 0 };
+            catGroups[f.category][f.status]++;
+        });
+
+        const tierGroups = { REQUIRED: 0, DESIRED: 0, NICE_TO_HAVE: 0 };
+        [...gaps, ...partial, ...implemented].forEach(f => {
+            if (tierGroups[f.tier] !== undefined) tierGroups[f.tier]++;
+        });
+
+        let summary = '';
+        let level = 1;
+        if (finalScore >= 90) { summary = 'Strong compliance posture with minor gaps. Focus on required controls.'; level = 5; }
+        else if (finalScore >= 75) { summary = 'Moderate compliance. Several gaps require attention.'; level = 4; }
+        else if (finalScore >= 55) { summary = 'Defined compliance process. Address high-tier gaps.'; level = 3; }
+        else if (finalScore >= 35) { summary = 'Developing compliance. Critical gaps need remediation.'; level = 2; }
+        else { summary = 'Critical compliance gaps identified. Immediate action required.'; level = 1; }
+
+        const reqGaps = gaps.filter(g => g.tier === 'REQUIRED').length;
+        if (reqGaps > 0) summary += ` ${reqGaps} Required-tier controls are missing.`;
+
+        return {
+            gaps, partial, implemented,
+            score: finalScore,
+            maturityLevel: level,
+            maturityLabel: ['Initial', 'Developing', 'Defined', 'Managed', 'Optimizing'][level - 1],
+            summary,
+            byCategory: catGroups,
+            byTier: tierGroups,
+            attackTechniques: totalAttack,
+            criticalGaps: gaps.length
+        };
+    }
+
+    return { runAnalysis, parseCSV, parseJSON, DEFAULT_PROFILE };
+})();
+
+// Sample NIST CSF 2.0 Assessment Data
+const SAMPLE_DATA = [
+    {Control_ID: 'PR.AA-01', Control_Name: 'Identities and credentials managed', Category: 'Protect', Status: 'Partial', Severity: 'Critical'},
+    {Control_ID: 'PR.AA-02', Control_Name: 'Identities proofed and bound to credentials', Category: 'Protect', Status: 'Implemented', Severity: 'High'},
+    {Control_ID: 'PR.AA-03', Control_Name: 'Users services and hardware authenticated', Category: 'Protect', Status: 'Implemented', Severity: 'Critical'},
+    {Control_ID: 'PR.AA-04', Control_Name: 'Identity assertions protected and verified', Category: 'Protect', Status: 'Missing', Severity: 'High'},
+    {Control_ID: 'PR.AA-05', Control_Name: 'Access permissions and authorizations managed', Category: 'Protect', Status: 'Missing', Severity: 'Critical'},
+    {Control_ID: 'PR.DS-01', Control_Name: 'Data-at-rest is protected', Category: 'Protect', Status: 'Partial', Severity: 'Critical'},
+    {Control_ID: 'PR.DS-02', Control_Name: 'Data-in-transit is protected', Category: 'Protect', Status: 'Implemented', Severity: 'Critical'},
+    {Control_ID: 'PR.DS-10', Control_Name: 'Data-in-use confidentiality protected', Category: 'Protect', Status: 'Missing', Severity: 'High'},
+    {Control_ID: 'PR.PS-01', Control_Name: 'Configuration management practices established', Category: 'Protect', Status: 'Partial', Severity: 'High'},
+    {Control_ID: 'PR.PS-02', Control_Name: 'Software maintained and patched', Category: 'Protect', Status: 'Missing', Severity: 'Critical'},
+    {Control_ID: 'PR.PS-06', Control_Name: 'Secure software development practices', Category: 'Protect', Status: 'Partial', Severity: 'High'},
+    {Control_ID: 'PR.IR-01', Control_Name: 'Networks protected from unauthorized access', Category: 'Protect', Status: 'Implemented', Severity: 'High'},
+    {Control_ID: 'PR.IR-04', Control_Name: 'Adequate resource capacity for availability', Category: 'Protect', Status: 'Implemented', Severity: 'Medium'},
+    {Control_ID: 'DE.CM-01', Control_Name: 'Networks monitored for adverse events', Category: 'Detect', Status: 'Implemented', Severity: 'High'},
+    {Control_ID: 'DE.CM-02', Control_Name: 'Physical environment monitored', Category: 'Detect', Status: 'Implemented', Severity: 'Medium'},
+    {Control_ID: 'DE.CM-03', Control_Name: 'Computing hardware and software monitored', Category: 'Detect', Status: 'Partial', Severity: 'High'},
+    {Control_ID: 'DE.CM-06', Control_Name: 'External service provider activities monitored', Category: 'Detect', Status: 'Missing', Severity: 'Medium'},
+    {Control_ID: 'DE.CM-09', Control_Name: 'Security tool integrity monitored', Category: 'Detect', Status: 'Missing', Severity: 'High'},
+    {Control_ID: 'DE.AE-02', Control_Name: 'Detected events analyzed', Category: 'Detect', Status: 'Implemented', Severity: 'High'},
+    {Control_ID: 'DE.AE-06', Control_Name: 'Adverse event information shared with staff', Category: 'Detect', Status: 'Partial', Severity: 'Medium'},
+    {Control_ID: 'RS.MA-01', Control_Name: 'Incident response plan executed', Category: 'Respond', Status: 'Missing', Severity: 'Critical'},
+    {Control_ID: 'RS.AN-03', Control_Name: 'Incident analysis performed', Category: 'Respond', Status: 'Partial', Severity: 'High'},
+    {Control_ID: 'RS.MI-01', Control_Name: 'Incidents are contained', Category: 'Respond', Status: 'Partial', Severity: 'Critical'},
+    {Control_ID: 'RS.MI-02', Control_Name: 'Incidents are eradicated', Category: 'Respond', Status: 'Missing', Severity: 'High'},
+    {Control_ID: 'RC.RP-01', Control_Name: 'Recovery plan executed', Category: 'Recover', Status: 'Missing', Severity: 'Critical'},
+    {Control_ID: 'GV.RM-01', Control_Name: 'Risk management objectives established', Category: 'Govern', Status: 'Partial', Severity: 'Medium'},
+    {Control_ID: 'ID.RA-01', Control_Name: 'Vulnerabilities identified and recorded', Category: 'Identify', Status: 'Missing', Severity: 'Critical'}
+];
+
+// UI Functions
+function runSample() {
+    showLoading();
+    setTimeout(() => {
+        const result = GRCA.runAnalysis(SAMPLE_DATA, GRCA.DEFAULT_PROFILE);
+        displayResults(result);
+    }, 500);
+}
+
+function handleFileUpload(file) {
+    showLoading();
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        let controls = [];
+        try {
+            if (file.name.endsWith('.json')) {
+                controls = GRCA.parseJSON(e.target.result);
+            } else if (file.name.endsWith('.csv')) {
+                controls = GRCA.parseCSV(e.target.result);
+            } else if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls')) {
+                const wb = XLSX.read(e.target.result, {type: 'array'});
+                const ws = wb.Sheets[wb.SheetNames[0]];
+                controls = XLSX.utils.sheet_to_json(ws);
+            }
+        } catch(err) {
+            alert('Error parsing file: ' + err.message);
+            hideLoading();
+            return;
+        }
+        
+        if (!controls.length) {
+            alert('Could not parse controls from file');
+            hideLoading();
+            return;
+        }
+        
+        const result = GRCA.runAnalysis(controls, GRCA.DEFAULT_PROFILE);
+        displayResults(result);
+    };
+    reader.readAsBinaryString(file);
+}
+
+function displayResults(result) {
+    document.getElementById('upload-section').classList.add('hidden');
+    document.getElementById('results-section').classList.remove('hidden');
+    
+    document.getElementById('score-value').textContent = result.score + '%';
+    document.getElementById('gaps-value').textContent = result.criticalGaps;
+    document.getElementById('attacks-value').textContent = result.attackTechniques;
+    document.getElementById('level-value').textContent = result.maturityLevel;
+    document.getElementById('summary-text').textContent = result.summary;
+    
+    // Category bars
+    const catBars = document.getElementById('category-bars');
+    catBars.innerHTML = '';
+    Object.entries(result.byCategory).forEach(([cat, vals]) => {
+        const total = vals.Implemented + vals.Partial + vals.Missing;
+        const impl = vals.Implemented / total * 100;
+        catBars.innerHTML += `
+            <div class="bar-item">
+                <span class="bar-label">${cat}</span>
+                <div class="bar-track"><div class="bar-fill" style="width: ${impl}%; background: ${impl > 70 ? 'var(--low)' : impl > 40 ? 'var(--medium)' : 'var(--critical)'}"></div></div>
+                <span class="bar-value">${Math.round(impl)}%</span>
+            </div>`;
+    });
+    
+    // Tier bars
+    const tierBars = document.getElementById('tier-bars');
+    tierBars.innerHTML = '';
+    const tierColors = { REQUIRED: 'var(--critical)', DESIRED: 'var(--medium)', NICE_TO_HAVE: 'var(--text-secondary)' };
+    Object.entries(result.byTier).forEach(([tier, count]) => {
+        const max = Math.max(...Object.values(result.byTier));
+        tierBars.innerHTML += `
+            <div class="bar-item">
+                <span class="bar-label">${tier.replace('_', ' ')}</span>
+                <div class="bar-track"><div class="bar-fill" style="width: ${max ? count/max*100 : 0}%; background: ${tierColors[tier]}"></div></div>
+                <span class="bar-value">${count}</span>
+            </div>`;
+    });
+    
+    // Findings table
+    const tbody = document.getElementById('findings-body');
+    tbody.innerHTML = result.gaps.slice(0, 15).map(g => `
+        <tr>
+            <td><strong>${g.id}</strong></td>
+            <td>${g.name}</td>
+            <td><span class="status-badge status-${g.status.toLowerCase()}">${g.status}</span></td>
+            <td>${g.tier}</td>
+        </tr>
+    `).join('');
+    
+    hideLoading();
+}
+
+function showLoading() {
+    document.getElementById('loading').classList.remove('hidden');
+}
+
+function hideLoading() {
+    document.getElementById('loading').classList.add('hidden');
+}
+
+// Event Listeners
+document.getElementById('dropzone').addEventListener('click', () => document.getElementById('file-input').click());
+document.getElementById('file-input').addEventListener('change', e => {
+    if (e.target.files[0]) handleFileUpload(e.target.files[0]);
+});
+document.getElementById('dropzone').addEventListener('dragover', e => { e.preventDefault(); e.currentTarget.style.borderColor = 'var(--accent)'; });
+document.getElementById('dropzone').addEventListener('dragleave', e => { e.currentTarget.style.borderColor = ''; });
+document.getElementById('dropzone').addEventListener('drop', e => {
+    e.preventDefault();
+    if (e.dataTransfer.files[0]) handleFileUpload(e.dataTransfer.files[0]);
+});
+    </script>
+</body>
+</html>
