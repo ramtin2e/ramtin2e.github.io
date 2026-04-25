@@ -5,28 +5,29 @@
 <meta name="viewport" content="width=device-width">
 <title>Loot &amp; Mob Object Detection - Ramtin.</title>
 <style>
-@import "https://fonts.googleapis.com/css2?family=Sen:wght@400;600&family=Source+Code+Pro&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap";
+@import "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&display=swap";
 
 * { min-width: 0; margin: 0; padding: 0; box-sizing: border-box; color: inherit; text-decoration: inherit; }
 
 :root {
-  --bg: 0, 18, 40;
-  --bg-dark: 0, 12, 28;
-  --text-primary: white;
-  --text-muted: rgba(255,255,255,0.68);
-  --accent-light: 120, 180, 255;
+  /* Dark cyber-green palette */
+  --bg: 10, 12, 10;
+  --bg-dark: 6, 8, 6;
+  --text-primary: #f0f0f0;
+  --text-muted: rgba(240,240,240,0.68);
+  --accent-light: 95, 200, 130;
   --navbar-size: 60px;
 }
 
-html { font-family: Tinos, Georgia, Times, serif; background: rgb(var(--bg)); }
+html { font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; background: rgb(var(--bg)); }
 body { color: var(--text-primary); }
-code { font-family: 'Source Code Pro', Courier New, monospace; }
+code { font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
 
 .navbar {
   display: flex; justify-content: space-between; align-items: center;
   background-color: rgb(var(--bg-dark)); color: var(--text-primary);
   height: var(--navbar-size); padding: 0 1rem;
-  font-family: 'Source Code Pro', Courier New, monospace;
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   position: relative; z-index: 10;
 }
 .hamburger-checkbox { z-index: -1; display: none; }
@@ -54,7 +55,7 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
 .hero-dim {
   position: absolute;
   inset: 0;
-  background: rgba(0, 10, 22, 0.55);
+  background: rgba(6, 8, 6, 0.55);
   z-index: 1;
   pointer-events: none;
 }
@@ -76,7 +77,7 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
 .directory-meta,
 .directory-link,
 .code-label {
-  font-family: 'Source Code Pro', Courier New, monospace;
+  font-family: 'Geist Mono', ui-monospace, monospace;
 }
 
 .hero-kicker {
@@ -89,7 +90,7 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
 }
 
 .hero-text h1 {
-  font-family: Sen, Helvetica, sans-serif;
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
   font-size: clamp(2.2rem, 4vw, 3.4rem);
   letter-spacing: 0.04em;
   margin-bottom: 0.45rem;
@@ -116,7 +117,7 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
   align-self: start;
   padding: 1rem;
   border-radius: 14px;
-  background: linear-gradient(180deg, rgba(8, 24, 46, 0.94), rgba(4, 16, 32, 0.94));
+  background: linear-gradient(180deg, rgba(10, 16, 10, 0.94), rgba(6, 10, 6, 0.94));
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
 }
 
@@ -130,13 +131,13 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
 }
 
 .directory-name {
-  font-family: Sen, Helvetica, sans-serif;
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
   font-size: 1.2rem;
   margin-bottom: 0.35rem;
 }
 
 .directory-meta {
-  color: rgba(255,255,255,0.58);
+  color: rgba(240,240,240,0.58);
   font-size: 0.78rem;
   line-height: 1.6;
   margin-bottom: 1rem;
@@ -157,26 +158,26 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
 }
 
 .directory-link:hover {
-  background: rgba(120, 180, 255, 0.08);
-  box-shadow: inset 0 0 0 1px rgba(120, 180, 255, 0.18);
+  background: rgba(95, 200, 130, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(95, 200, 130, 0.18);
   transform: translateX(2px);
 }
 
 .directory-link.active {
-  background: rgba(120, 180, 255, 0.12);
-  box-shadow: inset 0 0 0 1px rgba(120, 180, 255, 0.28);
+  background: rgba(95, 200, 130, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(95, 200, 130, 0.28);
 }
 
 .directory-link strong {
   display: block;
-  font-family: Sen, Helvetica, sans-serif;
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
   font-size: 0.98rem;
   margin-bottom: 0.22rem;
 }
 
 .directory-link span {
   display: block;
-  color: rgba(255,255,255,0.56);
+  color: rgba(240,240,240,0.56);
   font-size: 0.74rem;
   line-height: 1.5;
 }
@@ -197,8 +198,8 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
   margin-bottom: 1.4rem;
   padding: 1rem 1.1rem;
   border-radius: 12px;
-  background: linear-gradient(180deg, rgba(12, 30, 56, 0.95), rgba(6, 18, 36, 0.95));
-  box-shadow: inset 0 0 0 1px rgba(120, 180, 255, 0.18);
+  background: linear-gradient(180deg, rgba(12, 20, 14, 0.95), rgba(6, 12, 8, 0.95));
+  box-shadow: inset 0 0 0 1px rgba(95, 200, 130, 0.18);
 }
 
 .notice-title {
@@ -212,7 +213,7 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
 .notice p,
 .article-section p,
 .code-intro p {
-  color: rgba(255,255,255,0.72);
+  color: rgba(240,240,240,0.72);
   line-height: 1.72;
 }
 
@@ -226,7 +227,7 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
 .article-section {
   padding: 1.5rem;
   border-radius: 14px;
-  background: linear-gradient(180deg, rgba(8, 24, 46, 0.92), rgba(4, 16, 32, 0.92));
+  background: linear-gradient(180deg, rgba(10, 16, 10, 0.92), rgba(6, 10, 6, 0.92));
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
 }
 
@@ -240,7 +241,7 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
 }
 
 .article-section h2 {
-  font-family: Sen, Helvetica, sans-serif;
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
   font-size: clamp(1.5rem, 2vw, 2rem);
   margin-bottom: 1rem;
 }
@@ -304,7 +305,7 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
   font-size: 0.78rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  background: rgba(120, 180, 255, 0.08);
+  background: rgba(95, 200, 130, 0.08);
   border-bottom: 1px solid rgba(255,255,255,0.07);
 }
 
@@ -313,7 +314,7 @@ pre {
   padding: 1rem;
   overflow-x: auto;
   color: rgba(255,255,255,0.88);
-  font-family: 'Source Code Pro', Courier New, monospace;
+  font-family: 'Geist Mono', ui-monospace, monospace;
   font-size: 0.82rem;
   line-height: 1.6;
   background: rgba(0, 0, 0, 0.24);
@@ -507,8 +508,8 @@ currency = [d for d in detections
         float rounding_threshold = 0.0015;
         float rounded = floor(noise * levels) / levels;
         float rounding_error = abs(rounded - noise) / 2.0;
-        vec3 lines = vec3(0.47, 0.71, 1.0);
-        vec3 bg = vec3(0.0, 0.07, 0.16);
+        vec3 lines = vec3(0.24, 0.55, 0.36);
+        vec3 bg = vec3(0.039, 0.047, 0.039);
         if (rounding_error < rounding_threshold) {
             U = vec4(lines, 1.0);
         } else {

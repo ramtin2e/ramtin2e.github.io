@@ -5,30 +5,32 @@
 <meta name="viewport" content="width=device-width">
 <title>Blog — Ramtin.</title>
 <style>
-@import "https://fonts.googleapis.com/css2?family=Sen:wght@400;600&family=Source+Code+Pro&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap";
+@import "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&display=swap";
 
 * { min-width: 0; margin: 0; padding: 0; box-sizing: border-box; color: inherit; text-decoration: inherit; }
 
 :root {
-  --bg: 0, 18, 40;
-  --bg-dark: 0, 12, 28;
-  --text-primary: white;
-  --accent: 30, 100, 180;
-  --accent-light: 120, 180, 255;
-  --accent-dark: 10, 60, 120;
+  /* Dark cyber-green palette */
+  --bg: 10, 12, 10;
+  --bg-dark: 6, 8, 6;
+  --text-primary: #f0f0f0;
+  --text-muted: #888888;
+  --accent: 50, 180, 100;
+  --accent-light: 95, 200, 130;
+  --accent-dark: 30, 95, 55;
   --accent-gradient: linear-gradient(45deg, rgb(var(--accent-dark)), rgb(var(--accent)) 30%, rgb(var(--accent-light)) 60%);
   --navbar-size: 60px;
 }
 
-html { font-family: Tinos, Georgia, Times, serif; background: rgb(var(--bg)); }
-code { font-family: 'Source Code Pro', Courier New, monospace; }
+html { font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; background: rgb(var(--bg)); }
+code { font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
 
 /* NAVBAR */
 .navbar {
   display: flex; justify-content: space-between; align-items: center;
   background-color: rgb(var(--bg-dark)); color: var(--text-primary);
   height: var(--navbar-size); padding: 0 1rem;
-  font-family: 'Source Code Pro', Courier New, monospace;
+  font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   position: relative; z-index: 10;
 }
 .hamburger-checkbox { z-index: -1; display: none; }
@@ -68,7 +70,7 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
 .hero-dim {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0, 10, 22, 0.55);
+  background: rgba(6, 8, 6, 0.55);
   z-index: 1;
   pointer-events: none;
 }
@@ -82,13 +84,14 @@ code { font-family: 'Source Code Pro', Courier New, monospace; }
 
 .hero-text h1 {
   font-size: 3rem;
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
   letter-spacing: 0.04em;
   margin-bottom: 0.4rem;
 }
 
 .hero-text p {
   color: rgb(var(--accent-light));
-  font-family: 'Source Code Pro', Courier New, monospace;
+  font-family: 'Geist Mono', ui-monospace, monospace;
   font-size: 0.95rem;
   opacity: 0.85;
 }
@@ -102,7 +105,7 @@ main {
 }
 
 .blog-section-label {
-  font-family: 'Source Code Pro', Courier New, monospace;
+  font-family: 'Geist Mono', ui-monospace, monospace;
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -123,7 +126,7 @@ main {
   padding: 1.1rem 1.2rem;
   border-radius: 8px;
   background-color: rgb(var(--bg-dark));
-  box-shadow: inset 0 0 0 1px #ffffff1a;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
   margin-bottom: 0.75rem;
   text-decoration: none;
   transition: background-position 0.5s cubic-bezier(.22,1,.36,1), box-shadow 0.25s ease;
@@ -148,7 +151,7 @@ main {
 }
 
 .entry-title {
-  font-family: Sen, Helvetica, sans-serif;
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
   font-size: 1.05rem;
   font-weight: 600;
   color: var(--text-primary);
@@ -157,7 +160,7 @@ main {
 }
 
 .entry-meta {
-  font-family: 'Source Code Pro', Courier New, monospace;
+  font-family: 'Geist Mono', ui-monospace, monospace;
   font-size: 0.72rem;
   color: rgb(var(--accent-light));
   opacity: 0.55;
@@ -166,8 +169,8 @@ main {
 
 .entry-desc {
   font-size: 0.88rem;
-  color: rgba(255,255,255,0.6);
-  font-family: 'Source Code Pro', Courier New, monospace;
+  color: rgba(240,240,240,0.6);
+  font-family: 'Geist Mono', ui-monospace, monospace;
   line-height: 1.5;
 }
 
@@ -179,12 +182,12 @@ main {
 }
 
 .tag {
-  font-family: 'Source Code Pro', Courier New, monospace;
+  font-family: 'Geist Mono', ui-monospace, monospace;
   font-size: 0.65rem;
   padding: 0.15rem 0.5rem;
   border-radius: 4px;
-  background: rgba(30, 100, 180, 0.2);
-  border: 1px solid rgba(120, 180, 255, 0.2);
+  background: rgba(50, 180, 100, 0.12);
+  border: 1px solid rgba(95, 200, 130, 0.2);
   color: rgb(var(--accent-light));
   opacity: 0.8;
   text-transform: lowercase;
@@ -192,7 +195,7 @@ main {
 
 .entry-arrow {
   flex-shrink: 0;
-  color: rgba(120, 180, 255, 0.3);
+  color: rgba(95, 200, 130, 0.3);
   font-size: 1.1rem;
   align-self: center;
   transition: color 0.25s, transform 0.25s;
@@ -298,8 +301,8 @@ main {
         float rounding_threshold = 0.0015;
         float rounded = floor(noise * levels) / levels;
         float rounding_error = abs(rounded - noise) / 2.0;
-        vec3 lines = vec3(0.47, 0.71, 1.0);
-        vec3 bg = vec3(0.0, 0.07, 0.16);
+        vec3 lines = vec3(0.24, 0.55, 0.36);
+        vec3 bg = vec3(0.039, 0.047, 0.039);
         if (rounding_error < rounding_threshold) {
             U = vec4(lines, 1.0);
         } else {
