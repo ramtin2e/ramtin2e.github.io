@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reebee's Birthday Trick!</title>
+  <style>
+    /* Load EarthBound/Godot Ness Font */
+    @font-face {
+      font-family: 'Ness';
+      src: url('ness.otf') format('opentype');
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      background-color: #000000;
+      font-family: 'Ness', 'Courier New', monospace;
+      color: #ffffff;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Transparent Dialog Container */
+    .dialog-container {
+      position: relative;
+      z-index: 10;
+      width: 90%;
+      max-width: 600px;
+      background: transparent;
+      padding: 30px;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .dialog-container.error-shake {
+      animation: shake 0.4s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-10px); }
+      40%, 80% { transform: translateX(10px); }
+    }
+
+    /* Subtitle / Question */
+    .question {
+      font-size: 24px;
+      margin-bottom: 35px;
+      color: #ffffff; /* Plain white retro text */
+      line-height: 1.6;
+      text-shadow: 2px 2px 0px #333333;
+    }
+
+    /* Password Input styling */
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 25px;
+      width: 100%;
+    }
+
+    .password-input {
+      width: 100%;
+      background-color: #000000;
+      border: 2px solid #555555;
+      border-radius: 4px;
+      font-family: 'Ness', 'Courier New', monospace;
+      font-size: 22px;
+      color: #ffffff;
+      padding: 12px 20px;
+      text-align: center;
+      outline: none;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .password-input:focus {
+      border-color: #ffffff;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    }
+
+    /* Button Styling */
+    .submit-btn {
+      font-family: 'Ness', 'Courier New', monospace;
+      font-size: 18px;
+      background-color: #ffffff;
+      color: #000000;
+      border: none;
+      border-radius: 4px;
+      padding: 12px 35px;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px #555555;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s ease;
+    }
+
+    .submit-btn:hover {
+      background-color: #ffff55;
+      box-shadow: 4px 4px 0px #888800;
+    }
+
+    .submit-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px #888800;
+    }
+
+    /* Hint message styling */
+    .hint-container {
+      margin-top: 25px;
+      height: 70px; /* fits multi-line 24 hint beautifully */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hint-text {
+      font-size: 16px;
+      color: #ff5555;
+      text-shadow: 1px 1px 0px #220000;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      line-height: 1.5;
+      white-space: pre-line; /* respects newline characters in hint string */
+    }
+
+    .hint-text.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Success / Celebration Panel */
+    .success-panel {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .success-title {
+      font-size: 32px;
+      color: #55ff55;
+      margin-bottom: 25px;
+      text-shadow: 2px 2px 0px #003c00;
+    }
+
+    .success-msg {
+      font-size: 24px;
+      margin-bottom: 35px;
+      line-height: 1.6;
+      color: #ffffff;
+      text-shadow: 2px 2px 0px #333333;
+    }
+
+    .download-btn {
+      font-family: 'Ness', 'Courier New', monospace;
+      font-size: 20px;
+      background-color: #55ff55;
+      color: #000000;
+      border: none;
+      border-radius: 4px;
+      padding: 15px 40px;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px #00aa00;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .download-btn:hover {
+      background-color: #aaffaa;
+      box-shadow: 4px 4px 0px #55ff55;
+    }
+
+    .download-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px #55ff55;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dialog-container" id="dialog">
+    <!-- Question Panel -->
+    <div id="question-panel">
+      <div class="question">
+        how old is reebee turning?<br>(trick question)
+      </div>
+
+      <div class="input-wrapper">
+        <input type="text" class="password-input" id="password" autocomplete="off" placeholder="???" maxlength="20" autofocus>
+      </div>
+
+      <button class="submit-btn" onclick="checkPassword()">ENTER</button>
+
+      <div class="hint-container">
+        <div class="hint-text" id="hint">
+          (Hint: shes turning the same age she is :3)
+        </div>
+      </div>
+    </div>
+
+    <!-- Success / Download Panel -->
+    <div class="success-panel" id="success-panel">
+      <h1 class="success-title">CORRECT!</h1>
+      <div class="success-msg">
+        OUO OUO OUO OUO OUO OUO
+      </div>
+      <a href="reebee_package.zip" class="download-btn" id="dl-link" download>DOWNLOAD PACKAGE</a>
+    </div>
+  </div>
+
+  <script>
+    // Audio synthesizer context
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    // Custom 8-bit sound generator
+    function playBeep(freq, duration, type = 'square', freqEnd = null) {
+      initAudio();
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        if (freqEnd) {
+          osc.frequency.exponentialRampToValueAtTime(freqEnd, audioCtx.currentTime + duration);
+        }
+        
+        gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        console.warn("Audio Context failed:", e);
+      }
+    }
+
+    // Play retro typing beep
+    document.getElementById('password').addEventListener('input', (e) => {
+      if (e.inputType !== 'deleteContentBackward') {
+        playBeep(450 + Math.random() * 100, 0.04, 'square', 100);
+      } else {
+        playBeep(300, 0.04, 'square', 80);
+      }
+    });
+
+    // Handle Enter keypress in input
+    document.getElementById('password').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        checkPassword();
+      }
+    });
+
+    // Check password logic
+    function checkPassword() {
+      const inputVal = document.getElementById('password').value.trim().toLowerCase();
+      const hint = document.getElementById('hint');
+      const dialog = document.getElementById('dialog');
+      
+      if (inputVal === '2' || inputVal === 'two') {
+        playSuccessJingle();
+        triggerSuccess();
+      } else {
+        playErrorBuzzer();
+        dialog.classList.remove('error-shake');
+        void dialog.offsetWidth; // trigger reflow
+        dialog.classList.add('error-shake');
+        
+        // Show customized Hint
+        if (inputVal === '24') {
+          hint.innerText = "You aren't wrong but\n(Hint: shes turning the same age she is :3)";
+        } else {
+          hint.innerText = "(Hint: shes turning the same age she is :3)";
+        }
+        hint.classList.add('visible');
+        
+        // Reset password box focus & content
+        document.getElementById('password').value = '';
+        document.getElementById('password').focus();
+        
+        setTimeout(() => {
+          dialog.classList.remove('error-shake');
+        }, 400);
+      }
+    }
+
+    // 8-bit sound effects
+    function playErrorBuzzer() {
+      playBeep(180, 0.12, 'sawtooth', 80);
+      setTimeout(() => {
+        playBeep(150, 0.15, 'sawtooth', 70);
+      }, 80);
+    }
+
+    function playSuccessJingle() {
+      initAudio();
+      try {
+        const notes = [
+          { f: 261.63, d: 0.08 }, // C4
+          { f: 329.63, d: 0.08 }, // E4
+          { f: 392.00, d: 0.08 }, // G4
+          { f: 523.25, d: 0.08 }, // C5
+          { f: 659.25, d: 0.12 }, // E5
+          { f: 783.99, d: 0.12 }, // G5
+          { f: 1046.50, d: 0.4 }  // C6
+        ];
+        
+        notes.forEach((note, idx) => {
+          setTimeout(() => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(note.f, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + note.d);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + note.d);
+          }, idx * 80);
+        });
+      } catch (e) {
+        console.warn("Success jingle failed:", e);
+      }
+    }
+
+    // Trigger transition to success panel
+    function triggerSuccess() {
+      const questionPanel = document.getElementById('question-panel');
+      const successPanel = document.getElementById('success-panel');
+      
+      // Fade out current panel
+      questionPanel.style.transition = "opacity 0.3s ease";
+      questionPanel.style.opacity = 0;
+      
+      setTimeout(() => {
+        questionPanel.style.display = "none";
+        successPanel.style.display = "flex";
+        
+        // Auto trigger download
+        setTimeout(() => {
+          const dlLink = document.getElementById('dl-link');
+          dlLink.click();
+        }, 600);
+      }, 300);
+    }
+  </script>
+</body>
+</html>
